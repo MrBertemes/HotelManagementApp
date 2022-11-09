@@ -48,8 +48,8 @@ class _LoginPageState extends State<LoginPage> {
                   Center(
                     heightFactor: 1.7,
                     child: Image(
-                      image: AssetImage('assets/imgs/bk.png'),
-                      width: MediaQuery.of(context).size.width * 0.5,
+                      image: AssetImage('assets/images/bk.png'),
+                      width: MediaQuery.of(context).size.width * 0.15,
                     ),
                   ),
                   // ClipPath(

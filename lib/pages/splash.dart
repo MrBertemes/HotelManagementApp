@@ -57,7 +57,7 @@ class _SplashScreenState extends State<SplashScreen>
           gradient: RadialGradient(
             radius: 2.0,
             colors: [
-              Colors.white,
+              Colors.grey,
             ],
           ),
         ),
@@ -65,8 +65,8 @@ class _SplashScreenState extends State<SplashScreen>
           child: SlideTransition(
             position: _offsetAnimation,
             child: Image.asset(
-              './lib/assets/imgs/bk.png',
-              scale: 7.0,
+              'assets/images/bk.png',
+              scale: 10.0,
             ),
           ),
         ),

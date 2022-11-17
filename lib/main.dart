@@ -1,5 +1,6 @@
 // ignore_for_file: deprecated_member_use
 
+import 'package:bk/pages/hotel.dart';
 import 'package:bk/pages/signup.dart';
 import 'package:flutter/material.dart';
 import './pages/splash.dart';
@@ -33,7 +34,9 @@ class _MainState extends State<Main> {
         '/': (context) => SplashScreen(route: _defaultHome),
         '/login': (context) => const LoginPage(),
         '/signup':(context) => const SignupPage(),
+        '/hotel':(context) => const HotelPage(),
       },
     );
   }
 }
+ 

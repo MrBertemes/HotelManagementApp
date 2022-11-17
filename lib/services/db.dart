@@ -8,5 +8,11 @@ class DatabaseHelper{
   Future<void> openDB()async{
     await connection.open().then((value) => print('Conectado! :D'));
   }
-
+  Future<dynamic> loginHotel(int cod, int pin)async{
+    var s = await connection.mappedResultsQuery('''
+    select * from hotel where codh =$cod and pin = $pin ;
+    ''');
+    print(s);
+    return s;
+  }
 }

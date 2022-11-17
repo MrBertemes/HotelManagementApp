@@ -1,8 +1,8 @@
 // ignore_for_file: unused_field, prefer_final_fields, avoid_unnecessary_containers, prefer_const_constructors, sort_child_properties_last
-
 import 'package:bk/services/db.dart';
 import 'package:flutter/material.dart';
 import 'package:async_button_builder/async_button_builder.dart';
+import 'package:postgres/postgres.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -15,6 +15,7 @@ class _LoginPageState extends State<LoginPage> {
   late final TextEditingController _cod;
   late final TextEditingController _pin;
   DatabaseHelper db = DatabaseHelper();
+  
   bool _hidePin = true;
   bool _nonexistentCod = false;
   bool _invalidPin = false;
@@ -22,6 +23,7 @@ class _LoginPageState extends State<LoginPage> {
 
   @override
   void initState() {
+    db.openDB();
     _cod = TextEditingController();
     _pin = TextEditingController();
     super.initState();
@@ -34,8 +36,13 @@ class _LoginPageState extends State<LoginPage> {
     super.dispose();
   }
 
-  Future<void> teste() async {
-    db.openDB();
+  Future<void> login(String cod, String pin) async {
+
+    var codInt = int.parse(cod);
+    var pinInt = int.parse(pin);
+    var sim = await db.loginHotel(codInt, pinInt);
+    print(sim);
+    Navigator.popAndPushNamed(context, '/hotel');
   }
 
   Widget build(BuildContext context) {
@@ -151,7 +158,9 @@ class _LoginPageState extends State<LoginPage> {
                             loadingWidget: CircularProgressIndicator(
                               strokeWidth: 3.0,
                             ),
-                            onPressed: teste,
+                            onPressed: () async {
+                              login(_cod.text,_pin.text);
+                              },
                             builder: (context, child, callback, _) {
                               return TextButton(
                                 style: TextButton.styleFrom(

@@ -217,7 +217,6 @@ class _LoginPageState extends State<LoginPage> {
                             ],
                           ),
                           TextButton(
-                            // ignore: sort_child_properties_last
                             child: const Text('Cadastrar'),
                             style: TextButton.styleFrom(
                               textStyle: TextStyle(
@@ -235,7 +234,7 @@ class _LoginPageState extends State<LoginPage> {
                               ),
                             ),
                             onPressed: () async {
-                              await Navigator.popAndPushNamed(
+                              await Navigator.pushNamed(
                                   context, '/signup');
                             },
                           ),

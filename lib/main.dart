@@ -1,5 +1,6 @@
 // ignore_for_file: deprecated_member_use
 
+import 'package:bk/pages/signup.dart';
 import 'package:flutter/material.dart';
 import './pages/splash.dart';
 import './pages/login.dart';
@@ -31,6 +32,7 @@ class _MainState extends State<Main> {
       routes: {
         '/': (context) => SplashScreen(route: _defaultHome),
         '/login': (context) => const LoginPage(),
+        '/signup':(context) => const SignupPage(),
       },
     );
   }

@@ -1,4 +1,5 @@
 // ignore_for_file: unused_field, prefer_final_fields, avoid_unnecessary_containers, prefer_const_constructors, sort_child_properties_last, use_build_context_synchronously, dead_code, unused_local_variable
+import 'dart:async';
 import 'package:bk/services/db.dart';
 import 'package:flutter/material.dart';
 import 'package:async_button_builder/async_button_builder.dart';
@@ -43,7 +44,6 @@ class _LoginPageState extends State<LoginPage> {
     for (var element in hotel) {
       if (element.keys.first == 'hotel') {
         for (var e in element.values) {
-          print(e);
           for (var i in e.keys) {
             if (i == 'nome') {
               nomeHotel = e[i];
@@ -56,9 +56,31 @@ class _LoginPageState extends State<LoginPage> {
         }
       }
     }
-    Navigator.popAndPushNamed(context, '/hotel');
+    if(hotel.isEmpty){
+      var s = await db.verificaSenhaErrada(codHotel, pinInt);
+      for(var element in s){
+        for(var v in element.values){
+          for(var i in v.keys){
+            if(v[i]>0){
+              setState(() {
+                _invalidPin = true;
+              });
+            }
+            else{
+              setState(() {
+                _invalidCod = true;
+              });
+            }
+          }
+        }
+      }
+    }
+    else{
+      Navigator.popAndPushNamed(context, '/hotel');
+    }
   }
 
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: LayoutBuilder(
@@ -113,7 +135,7 @@ class _LoginPageState extends State<LoginPage> {
                               }
                               return null;
                             },
-                            keyboardType: TextInputType.emailAddress,
+                            keyboardType: TextInputType.number,
                           ),
                           Padding(padding: EdgeInsets.all(8.0)),
                           TextFormField(
@@ -155,6 +177,7 @@ class _LoginPageState extends State<LoginPage> {
                             },
                             enableSuggestions: false,
                             autocorrect: false,
+                            keyboardType: TextInputType.number,
                           ),
                           // Padding(padding: EdgeInsets.all(10.0)),
                           Padding(padding: EdgeInsets.all(30.0)),

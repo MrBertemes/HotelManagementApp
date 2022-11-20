@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
+import '../services/db.dart';
 
 class SplashScreen extends StatefulWidget {
   final String route;
@@ -15,6 +16,8 @@ class _SplashScreenState extends State<SplashScreen>
     duration: const Duration(milliseconds: 2500),
     vsync: this,
   )..forward();
+
+  
 
   late final Animation<Offset> _offsetAnimation = Tween<Offset>(
     begin: const Offset(2.0, 0.0),

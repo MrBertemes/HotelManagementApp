@@ -1,7 +1,3 @@
-// ignore_for_file: avoid_print
-
-import 'dart:ffi';
-
 import 'package:postgres/postgres.dart';
 
 class DatabaseHelper{
@@ -10,18 +6,24 @@ class DatabaseHelper{
   Future<void> openDB()async{
     await connection.open().then((value) => print('Conectado! :D'));
   }
-  Future<dynamic> loginHotel(int cod, int pin)async{
-    var s = await connection.mappedResultsQuery('''
+  Future<List<Map<String,Map<String,dynamic>>>> loginHotel(int cod, int pin)async{
+    var hotel = await connection.mappedResultsQuery('''
     select * from hotel where codh =$cod and pin = $pin ;
     ''');
-    return s;
+    return hotel;
   }
-  Future<List<Map<String, Map<String, dynamic>>>> nomeHotelCod(int cod) async{
-    var nome = await connection.mappedResultsQuery('''
-    select nome from hotel where codh = $cod;
+  Future<List<Map<String,Map<String,dynamic>>>> verificaSenhaErrada(int cod, int pin) async{
+    var existe  = await connection.mappedResultsQuery('''
+    select count(codh) from hotel where codh = $cod and pin <> $pin; 
     ''');
-    return nome;
+    return existe;
   }
+  // Future<List<Map<String, Map<String, dynamic>>>> nomeHotelCod(int cod) async{
+  //   var nome = await connection.mappedResultsQuery('''
+  //   select nome from hotel where codh = $cod;
+  //   ''');
+  //   return nome;
+  // }
 
   Future<List<Map<String, Map<String, dynamic>>>> quartosHotel(int cod) async{
     var qts = await connection.mappedResultsQuery('''

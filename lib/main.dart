@@ -8,12 +8,12 @@ import './pages/splash.dart';
 import './pages/login.dart';
 
 String _defaultHome = '/login';
-var hotel;
-late var nomeHotel;
-late var enderecoHotel;
-late var numHotel;
+late List<Map<String,Map<String,dynamic>>> hotel;
+late String nomeHotel;
+late String enderecoHotel;
+late String numHotel;
 late int codHotel;
-late var telefoneHotel;
+late String telefoneHotel;
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();

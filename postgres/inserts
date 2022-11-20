@@ -1,0 +1,98 @@
+-- primeiro andar --
+insert into quartos values (101, 1);
+insert into quartos values (102, 1);
+insert into quartos values (103, 1);
+insert into quartos values (104, 1);
+insert into quartos values (105, 1);
+insert into quartos values (106, 1);
+insert into quartos values (107, 1);
+insert into quartos values (108, 1);
+insert into quartos values (109, 1);
+insert into quartos values (110, 1);
+-- segundo andar --
+insert into quartos values (201, 2);
+insert into quartos values (202, 2);
+insert into quartos values (203, 2);
+insert into quartos values (204, 2);
+insert into quartos values (205, 2);
+insert into quartos values (206, 2);
+insert into quartos values (207, 2);
+insert into quartos values (208, 2);
+insert into quartos values (209, 2);
+insert into quartos values (210, 2);
+-- terceiro andar --
+insert into quartos values (301, 3);
+insert into quartos values (302, 3);
+insert into quartos values (303, 3);
+insert into quartos values (304, 3);
+insert into quartos values (305, 3);
+insert into quartos values (306, 3);
+insert into quartos values (307, 3);
+insert into quartos values (308, 3);
+insert into quartos values (309, 3);
+insert into quartos values (310, 3);
+-- quarto andar --
+insert into quartos values (401, 4);
+insert into quartos values (402, 4);
+insert into quartos values (403, 4);
+insert into quartos values (404, 4);
+insert into quartos values (405, 4);
+insert into quartos values (406, 4);
+insert into quartos values (407, 4);
+insert into quartos values (408, 4);
+insert into quartos values (409, 4);
+insert into quartos values (410, 4);
+-- quinto andar --
+insert into quartos values (501, 5);
+insert into quartos values (502, 5);
+insert into quartos values (503, 5);
+insert into quartos values (504, 5);
+insert into quartos values (505, 5);
+insert into quartos values (506, 5);
+insert into quartos values (507, 5);
+insert into quartos values (508, 5);
+insert into quartos values (509, 5);
+insert into quartos values (510, 5);
+-- sexto andar --
+insert into quartos values (601, 6);
+insert into quartos values (602, 6);
+insert into quartos values (603, 6);
+insert into quartos values (604, 6);
+insert into quartos values (605, 6);
+-- setimo andar --
+insert into quartos values (701, 7);
+insert into quartos values (702, 7);
+insert into quartos values (703, 7);
+insert into quartos values (704, 7);
+insert into quartos values (705, 7);
+-- oitavo, nono e decimo andar --
+insert into quartos values (801, 8);
+insert into quartos values (802, 8);
+insert into quartos values (803, 8);
+insert into quartos values (901, 9);
+insert into quartos values (902, 9);
+insert into quartos values (903, 9);
+insert into quartos values (1001, 10);
+insert into quartos values (1002, 10);
+insert into quartos values (1003, 10);
+
+-- hotel 101(pequeno) e hotel 100 (grande)--
+insert into hotel values (101, 1015, 'Almond Hotel', 'Alameda Crisântemo, 275 - São Paulo, SP', '(11)30182020');
+insert into hotel values (100, 1111, 'Grass Hotel', 'Avenida São Cristóvão, 1705 - Rio de Janeiro, RJ', '(21)30181019');
+-- cadastro de clientes pela funcao --
+select cadastrar_cliente ('Marcia Rosana Cristina', 'Rua das Vitorias, 3030 - Joinville, SC', '(47)997134070');
+select cadastrar_cliente ('Jairo Constantino Vilanova', 'Rua Coronel Antonio Machado, 27 - Florianópolis, SC', '(48)992661070');
+-- cadastro de empregados --
+insert into empregados values(105657, 'Janice Cunha dos Santos', 100);
+insert into empregados values(105509, 'Edevaldo Costa Lima', 100);
+insert into empregados values(105897, 'Petra Santana', 100);
+insert into empregados values(105555, 'Maria de Jesus Firmino', 100);
+insert into empregados values(112235, 'Alan Pierre Massa', 101);
+insert into empregados values(112741, 'Claudia Miano', 101);
+-- servicos --
+select cadastrar_servico('Bar', 50.0);
+-- cadastrar reservas pela funcao --
+select cadastrar_reserva(104, 101, 10, 'Não', '2023-05-20', '2023-05-23');
+select cadastrar_reserva(502, 101, 10, 'Não', '2022-11-20', '2023-01-03');
+-- 
+

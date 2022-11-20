@@ -1,0 +1,84 @@
+create table if not exists empregados (
+	nro integer primary key,
+	nome varchar(50) not null,
+	codhotel integer not null
+);
+
+create table if not exists servicos (
+	cods integer primary key,
+	tipo varchar(15) not null,
+	preco float not null
+);
+
+create table if not exists hotel (
+	codh integer primary key,
+	pin integer not null,
+	nome varchar(50) not null,
+	endereco varchar(100) not null,
+	telefone varchar(15) not null
+);
+
+create table if not exists clientes (
+	nro integer primary key,
+	nome varchar(50) not null,
+	endereco varchar(100) not null,
+	telefone varchar(15) not null
+);
+
+create table if not exists quartos (
+	num integer primary key,
+	andar integer not null
+);
+
+create table if not exists quartoHotel (
+	codHotel integer,
+	numQuarto integer,
+	preco float not null,
+	tipo character varying(20),
+	foreign key(codHotel) references hotel(codh),
+	foreign key(numQuarto) references quartos(num),
+	primary key(codHotel, numQuarto)
+);
+
+create table if not exists limpeza (
+	numQuarto integer,
+	nroEmpregado integer,
+	codh integer,
+	data date,
+	foreign key(numQuarto, codh) references quartoHotel(numQuarto, codHotel),
+	foreign key(nroEmpregado) references empregados(nro),
+	primary key(numQuarto, nroEmpregado, codh, data)
+);
+
+create table if not exists estadia (
+	code integer primary key,
+	checkin date not null,
+	checkout date not null,
+	nroCliente integer,
+	codHotel integer not null,
+	numQuarto integer not null,
+	foreign key(nroCliente) references clientes(nro),
+	foreign key(numQuarto, codHotel) references quartoHotel(numQuarto, codHotel)
+);
+
+create table if not exists reserva (
+	numQuarto integer,
+	codHotel integer,
+	nroCliente integer,
+	id integer,
+	codEstadia integer not null,
+	camaextra character varying(3) not null,
+	foreign key(numQuarto, codHotel) references quartoHotel(numQuarto, codHotel),
+	foreign key(nroCliente) references clientes(nro),
+	foreign key(codEstadia) references estadia(code),
+	primary key(numQuarto, codHotel, nroCliente, id)
+);
+
+create table if not exists servicoEstadia (
+	codServico integer,
+	codEstadia integer,
+	data date,
+	foreign key(codServico) references servicos(cods),
+	foreign key(codEstadia) references estadia(code),
+	primary key(codServico, codEstadia, data)
+);

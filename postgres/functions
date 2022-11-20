@@ -1,0 +1,167 @@
+-- vai vincular quartos padrao ao hotel ao cria-lo --
+-- hotel com cod par é um hotel grande, com cod impar é hotel pequeno --
+create or replace function cadastra_quartos() returns trigger as
+$$
+declare cont integer default 0;
+begin
+	if (new.codh % 2 = 0) then
+		for cont in 1..10 loop
+			insert into quartohotel values (new.codh, 100+cont, 0, 'single');
+			insert into quartohotel values (new.codh, 200+cont, 0, 'single');
+			insert into quartohotel values (new.codh, 300+cont, 0, 'single');
+			insert into quartohotel values (new.codh, 400+cont, 0, 'duplo');
+			insert into quartohotel values (new.codh, 500+cont, 0, 'duplo');
+			if cont < 6 then
+				insert into quartohotel values (new.codh, 600+cont, 0, 'casal');
+				insert into quartohotel values (new.codh, 700+cont, 0, 'casal');
+				if cont < 4 then
+					insert into quartohotel values (new.codh, 800+cont, 0, 'suite');
+					insert into quartohotel values (new.codh, 900+cont, 0, 'suite');
+					insert into quartohotel values (new.codh, 1000+cont, 0, 'suite');
+				end if;
+			end if;
+		end loop;
+	else
+		for cont in 1..10 loop
+			insert into quartohotel values (new.codh, 100+cont, 0, 'single');
+			insert into quartohotel values (new.codh, 200+cont, 0, 'single');
+			insert into quartohotel values (new.codh, 300+cont, 0, 'duplo');
+			insert into quartohotel values (new.codh, 400+cont, 0, 'duplo');
+			insert into quartohotel values (new.codh, 500+cont, 0, 'casal');
+		end loop;
+	end if;
+	
+	return new;
+end;
+$$
+language plpgsql;
+
+create trigger cadastra_quartos after insert on hotel
+	for each row execute procedure cadastra_quartos()
+	
+------------------------------------------------------------------------------------------------------
+-- vai gerar nro a partir de 10 --
+create or replace function cadastrar_cliente(nome text, endereco text, telefone text) returns void as
+$$
+declare maxNro integer default 9;
+begin
+	if (select count(nro) from clientes) > 0 then
+		select max(nro) into maxNro from clientes;
+	end if;
+	insert into clientes values (maxNro+1, nome, endereco, telefone);
+end;
+$$
+language plpgsql;
+
+---------------------------------------------------------------------------------------------------------
+-- sempre que um novo hotel for criado o preço dos quartos deve ser setado --
+
+create or replace function set_valor(single float, duplo float, casal float, suite float) returns void as
+$$
+	update quartoHotel set preco = single where tipo = 'single';
+	update quartoHotel set preco = duplo where tipo = 'duplo';
+	update quartoHotel set preco = casal where tipo = 'casal';
+	update quartoHotel set preco = suite where tipo = 'suite';
+$$
+language sql;
+
+-----------------------------------------------------------------------------------------------------------
+-- vai retornar o numero, andar e preco de todos os quartos de um tipo em um determinado hotel --
+
+create or replace function quartos_tipo(tipoQuarto text, codh integer) returns table(num integer, andar integer, tipo text, preco float) as
+$$
+	select numquarto, andar, tipo, preco from quartohotel join quartos on numquarto = num
+		where tipo = tipoQuarto and codhotel = codh;
+$$
+language sql;
+
+
+-----------------------------------------------------------------------------------------------------------
+-- vai mostrar os quartos disponiveis em um hotel de acordo com a data --
+
+create or replace function quartos_disponiveis(dtcheckin date, dtcheckout date, codh integer) returns table(num integer, andar integer, tipo text, preco float) as
+$$
+	select num, andar, tipo, preco from quartohotel join quartos on numquarto = num
+		where codhotel = codh and (numquarto, codhotel) not in (select numquarto, codhotel from estadia e
+									  where e.codhotel = codh and ((dtcheckout between checkin and checkout) or (dtcheckin between checkin and checkout)));
+$$
+language sql;
+
+------------------------------------------------------------------------------------------------------------
+-- retorna a lista de empregados disponiveis em uma determinada data e hotel --
+
+create or replace function empregado_disponivel(dt date, ncodhotel integer) returns table(nro integer, nome text) as
+$$
+	select * from empregados where nro not in (select nro from empregados join limpeza on nroempregado = nro
+						       where codh = ncodhotel and data = dt) and codhotel = ncodhotel;
+$$
+language sql;
+
+-----------------------------------------------------------------------------------------------------------
+-- cadastrar reserva. Ao cadastrar uma reserva ele também gera uma estadia automaticamente --
+
+create or replace function cadastrar_reserva(numquarto integer, codh integer, nrocliente integer, camaextra text, checkin date, checkout date) returns void as
+$$
+declare idreserva integer default 0;
+		codestadia integer default 0;
+begin
+	if (select count(id) from reserva) > 0 then
+		select max(id) into idreserva from reserva;
+		if (select count(code) from estadia) > 0 then
+			select max(code) into codestadia from estadia;
+		end if;
+	end if;
+	
+	insert into estadia values(codestadia+1, checkin, checkout, null, codh, numquarto);
+	insert into reserva values(numquarto, codh, nrocliente, idreserva+1, codestadia+1, camaextra);		
+end;
+$$
+language plpgsql;
+
+------------------------------------------------------------------------------------------------------------
+-- cadastrar servico --
+
+create or replace function cadastrar_servico(tipo text, preco float) returns void as
+$$
+declare codservico integer default 10;
+begin
+	if (select count(cods) from servicos) > 0 then
+		select max(cods) into codservico from servicos;
+	end if;
+	insert into servicos values(codservico+1, tipo, preco);
+end;
+$$
+language plpgsql;
+
+------------------------------------------------------------------------------------------------------------
+-- calcular o valor de uma estadia pelo codigo --
+
+create or replace function calcular_preco_estadia(ncode integer) returns float as
+$$
+declare soma float default 0.0;
+        precoquarto float default 0.0;
+		dtcheckin date;
+		dtcheckout date;
+		meses float default 0.0;
+		dias float default 0.0;
+		spreco float;
+begin
+	for spreco in (select preco from servicos join servicoestadia on cods = codservico where codestadia = ncode) loop
+		soma := soma + spreco;
+	end loop;
+	select preco into precoquarto from quartohotel q join estadia e on e.numquarto = q.numquarto where e.code = ncode;
+	select checkin, checkout into dtcheckin, dtcheckout from estadia where code = ncode;
+	select extract(month from date_trunc('month', age(dtcheckout, dtcheckin))) into meses;
+	select extract(day from date_trunc('day', age(dtcheckout, dtcheckin))) into dias;
+	soma := soma + precoquarto*30*meses + precoquarto*dias;
+	return soma;
+end;
+$$
+language plpgsql;
+
+
+
+
+
+
+

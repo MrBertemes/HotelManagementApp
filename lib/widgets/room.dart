@@ -32,7 +32,7 @@ class Room extends StatelessWidget {
               ),
               child: FittedBox(
                 child: Text(
-                  'Andar ${numero.toString()}, no segundo ${andar.toString()}',
+                  'Andar ${numero.toString()}, no andar ${andar.toString()}',
                   style: Theme.of(context).textTheme.headline6,
                 ),
               ),

@@ -1,8 +1,8 @@
-// ignore_for_file: unused_field, prefer_final_fields, avoid_unnecessary_containers, prefer_const_constructors, sort_child_properties_last
+// ignore_for_file: unused_field, prefer_final_fields, avoid_unnecessary_containers, prefer_const_constructors, sort_child_properties_last, use_build_context_synchronously, dead_code, unused_local_variable
 import 'package:bk/services/db.dart';
 import 'package:flutter/material.dart';
 import 'package:async_button_builder/async_button_builder.dart';
-import 'package:postgres/postgres.dart';
+import 'package:bk/main.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -15,7 +15,7 @@ class _LoginPageState extends State<LoginPage> {
   late final TextEditingController _cod;
   late final TextEditingController _pin;
   DatabaseHelper db = DatabaseHelper();
-  
+
   bool _hidePin = true;
   bool _nonexistentCod = false;
   bool _invalidPin = false;
@@ -37,11 +37,25 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   Future<void> login(String cod, String pin) async {
-
-    var codInt = int.parse(cod);
+    codHotel = int.parse(cod);
     var pinInt = int.parse(pin);
-    var sim = await db.loginHotel(codInt, pinInt);
-    print(sim);
+    hotel = await db.loginHotel(codHotel, pinInt);
+    for (var element in hotel) {
+      if (element.keys.first == 'hotel') {
+        for (var e in element.values) {
+          print(e);
+          for (var i in e.keys) {
+            if (i == 'nome') {
+              nomeHotel = e[i];
+            } else if (i == 'endereco') {
+              enderecoHotel = e[i];
+            } else if (i == 'telefone') {
+              telefoneHotel = e[i];
+            }
+          }
+        }
+      }
+    }
     Navigator.popAndPushNamed(context, '/hotel');
   }
 
@@ -53,8 +67,6 @@ class _LoginPageState extends State<LoginPage> {
             child: Center(
               child: ConstrainedBox(
                 constraints: BoxConstraints(
-                  // maxHeight: viewportConstraints.maxHeight,
-                  // maxWidth: viewportConstraints.maxWidth,
                   minHeight: viewportConstraints.maxHeight,
                   minWidth: viewportConstraints.maxWidth,
                 ),
@@ -159,8 +171,8 @@ class _LoginPageState extends State<LoginPage> {
                               strokeWidth: 3.0,
                             ),
                             onPressed: () async {
-                              login(_cod.text,_pin.text);
-                              },
+                              login(_cod.text, _pin.text);
+                            },
                             builder: (context, child, callback, _) {
                               return TextButton(
                                 style: TextButton.styleFrom(
@@ -243,8 +255,7 @@ class _LoginPageState extends State<LoginPage> {
                               ),
                             ),
                             onPressed: () async {
-                              await Navigator.pushNamed(
-                                  context, '/signup');
+                              await Navigator.pushNamed(context, '/signup');
                             },
                           ),
                         ],

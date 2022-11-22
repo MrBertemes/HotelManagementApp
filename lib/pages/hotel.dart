@@ -20,6 +20,12 @@ class _HotelPageState extends State<HotelPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        leading: IconButton(
+          icon: Icon(Icons.arrow_back),
+          onPressed: () {
+          Navigator.popAndPushNamed(context, '/login');
+        },
+        ),
         backgroundColor: Colors.lightBlue,
         title: Column(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -44,18 +50,6 @@ class _HotelPageState extends State<HotelPage> {
         centerTitle: true,
         elevation: 3,
       ),
-      // body: ListView.builder(
-      //   itemCount: _listRoom.length,
-      //   itemBuilder: ((context, index) {
-      //     return Column(
-      //       children: <Widget>[
-      //         Card(
-      //           child: _listRoom[index],
-      //         ),
-      //       ],
-      //     );
-      //   }),
-      // ),
       body: LayoutBuilder(
         builder: (BuildContext context, BoxConstraints viewportConstraints) {
           return SingleChildScrollView(
@@ -163,12 +157,6 @@ class _HotelPageState extends State<HotelPage> {
               ),
             ),
           );
-        },
-      ),
-      floatingActionButton: FloatingActionButton(
-        child: Icon(Icons.arrow_back),
-        onPressed: () {
-          Navigator.popAndPushNamed(context, '/login');
         },
       ),
     );

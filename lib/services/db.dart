@@ -18,12 +18,12 @@ class DatabaseHelper{
     ''');
     return existe;
   }
-  // Future<List<Map<String, Map<String, dynamic>>>> nomeHotelCod(int cod) async{
-  //   var nome = await connection.mappedResultsQuery('''
-  //   select nome from hotel where codh = $cod;
-  //   ''');
-  //   return nome;
-  // }
+  Future<PostgreSQLResult> cadastroHotel(int cod, int pin, String nome, String end, String tel) async {
+    var s = await connection.query('''
+    insert into hotel values($cod, $pin, $nome, $end, $tel);
+    ''');
+    return s;
+  }
 
   Future<List<Map<String, Map<String, dynamic>>>> quartosHotel(int cod) async{
     var qts = await connection.mappedResultsQuery('''

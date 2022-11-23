@@ -47,6 +47,7 @@ class _SignupPageState extends State<SignupPage> {
   Future<void> cadastroHotel(int cod, int pin, String nome, String end, String tel) async{
 
     var res = await db.cadastroHotel(cod, pin, nome, end, tel);
+    print(res);
   } 
 
   @override

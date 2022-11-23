@@ -3,11 +3,13 @@
 import 'package:bk/pages/chambre.dart';
 import 'package:bk/pages/hotel.dart';
 import 'package:bk/pages/signup.dart';
+import 'package:bk/services/db.dart';
 import 'package:flutter/material.dart';
 import './pages/splash.dart';
 import './pages/login.dart';
 
 String _defaultHome = '/login';
+DatabaseHelper db = DatabaseHelper();
 late List<Map<String,Map<String,dynamic>>> hotel;
 late String nomeHotel;
 late String enderecoHotel;

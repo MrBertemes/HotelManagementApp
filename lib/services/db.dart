@@ -18,9 +18,9 @@ class DatabaseHelper{
     ''');
     return existe;
   }
-  Future<PostgreSQLResult> cadastroHotel(int cod, int pin, String nome, String end, String tel) async {
-    var s = await connection.query('''
-    insert into hotel values($cod, $pin, $nome, $end, $tel);
+  Future<List<Map<String,Map<String,dynamic>>>> cadastroHotel(int cod, int pin, String nome, String end, String tel) async {
+    var s = await connection.mappedResultsQuery('''
+    insert into hotel values($cod, $pin, '$nome', '$end', '$tel');
     ''');
     return s;
   }

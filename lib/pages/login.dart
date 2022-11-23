@@ -1,6 +1,6 @@
 // ignore_for_file: unused_field, prefer_final_fields, avoid_unnecessary_containers, prefer_const_constructors, sort_child_properties_last, use_build_context_synchronously, dead_code, unused_local_variable
 import 'dart:async';
-import 'package:bk/services/db.dart';
+// import 'package:bk/services/db.dart';
 import 'package:flutter/material.dart';
 import 'package:async_button_builder/async_button_builder.dart';
 import 'package:bk/main.dart';
@@ -15,7 +15,6 @@ class LoginPage extends StatefulWidget {
 class _LoginPageState extends State<LoginPage> {
   late final TextEditingController _cod;
   late final TextEditingController _pin;
-  DatabaseHelper db = DatabaseHelper();
 
   bool _hidePin = true;
   bool _nonexistentCod = false;

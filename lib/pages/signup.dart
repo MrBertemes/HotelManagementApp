@@ -1,4 +1,4 @@
-// ignore_for_file: prefer_const_constructors, sort_child_properties_last
+// ignore_for_file: prefer_const_constructors, sort_child_properties_last, use_build_context_synchronously
 
 import 'package:async_button_builder/async_button_builder.dart';
 import 'package:bk/services/db.dart';
@@ -47,12 +47,12 @@ class _SignupPageState extends State<SignupPage> {
   Future<void> cadastroHotel(int cod, int pin, String nome, String end, String tel) async{
 
     var res = await db.cadastroHotel(cod, pin, nome, end, tel);
-    print(res);
+    Navigator.popAndPushNamed(context, '/login');
   } 
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return Scaffold( 
       body: LayoutBuilder(
         builder: (BuildContext context, BoxConstraints viewportConstraints) {
           return SingleChildScrollView(

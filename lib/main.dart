@@ -15,6 +15,8 @@ late String nomeHotel;
 late String enderecoHotel;
 late String numHotel;
 late int codHotel;
+late int qtAndarHotel = codHotel.isEven ? 10 : 5;
+late List<dynamic> quartosHotel ;
 late String telefoneHotel;
 
 void main() async {

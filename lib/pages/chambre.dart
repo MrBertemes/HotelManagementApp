@@ -1,5 +1,6 @@
 // ignore_for_file: prefer_const_constructors
 
+import 'package:bk/widgets/corridor.dart';
 import 'package:flutter/material.dart';
 import 'package:bk/main.dart';
 
@@ -15,6 +16,12 @@ class _ChambrePageState extends State<ChambrePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        leading: IconButton(
+          icon: Icon(Icons.arrow_back),
+          onPressed: () {
+            Navigator.popAndPushNamed(context, '/login');
+          },
+        ),
         backgroundColor: Colors.lightBlue,
         title: Column(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -39,17 +46,23 @@ class _ChambrePageState extends State<ChambrePage> {
         centerTitle: true,
         elevation: 3,
       ),
-      body: LayoutBuilder(
-        builder: (BuildContext context, BoxConstraints viewportConstraints) {
-          return SingleChildScrollView(
-            child: ConstrainedBox(
-              constraints: BoxConstraints(
-                minHeight: viewportConstraints.maxHeight,
-                minWidth: viewportConstraints.maxWidth,
-              ),
-              child: Center(
-                child: Text('ola'),
-              ),
+      body: ListView.builder(
+        physics: ScrollPhysics(),
+        shrinkWrap: true,
+        scrollDirection: Axis.vertical,
+        itemCount: qtAndarHotel,
+        itemBuilder: (context, index) {
+          return Container(
+            padding: EdgeInsets.all(10),
+            child: Row(
+
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                SizedBox(
+                  height: 100,
+                  child: Corridor(andar: index + 1),
+                ),
+              ],
             ),
           );
         },

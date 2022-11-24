@@ -25,9 +25,9 @@ class DatabaseHelper{
     return s;
   }
 
-  Future<List<Map<String, Map<String, dynamic>>>> quartosHotel(int cod) async{
+  Future<List<Map<String, Map<String, dynamic>>>> precoTipoQuartos(int num,int cod) async{
     var qts = await connection.mappedResultsQuery('''
-    select q.numquarto, q.tipo, q.preco, a.andar from quartohotel q join quartos a on a.num = q.numquarto where q.codhotel = $cod;
+    select preco, tipo from quartohotel where codhotel = $cod and numquarto = $num;
     ''');
     return qts;
   }

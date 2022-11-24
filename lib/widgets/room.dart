@@ -1,7 +1,6 @@
 // ignore_for_file: must_be_immutable
-
+import 'package:bk/main.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
 
 class Room extends StatelessWidget {
   int numero;
@@ -15,31 +14,33 @@ class Room extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return LayoutBuilder(
-      builder: ((context, constraints) {
-        return Row(
-          mainAxisAlignment: MainAxisAlignment.start,
+    return Container(
+      alignment: AlignmentDirectional.center,
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(12),
+        border: Border.all(
+          color: Colors.grey,
+          width: 3,
+        ),
+      ),
+      child: FittedBox(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
-            Container(
-              width: constraints.maxWidth,
-              alignment: AlignmentDirectional.center,
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(12),
-                border: Border.all(
-                  color: Colors.grey,
-                  width: 3,
-                ),
-              ),
-              child: FittedBox(
-                child: Text(
-                  'Andar ${numero.toString()}, no andar ${andar.toString()}',
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                Text(
+                  '${andar*100+numero}',
                   style: Theme.of(context).textTheme.headline6,
                 ),
-              ),
+                Text('Preco')
+              ],
             ),
+            Text('tipo')
           ],
-        );
-      }),
+        ),
+      ),
     );
   }
 }

@@ -1,4 +1,5 @@
 // ignore_for_file: must_be_immutable, prefer_const_constructors
+import 'package:bk/widgets/room.dart';
 import 'package:flutter/material.dart';
 
 class Corridor extends StatefulWidget {
@@ -30,8 +31,7 @@ int get qtQuartos {
       itemCount: qtQuartos,
       itemBuilder: (context, index) {
         return Card(
-          elevation: 4,
-          child: Text('${widget.andar * 100 + index + 1}'),
+          child: Room(andar: widget.andar,numero: index+1, preco: 0),
         );
       },
     );

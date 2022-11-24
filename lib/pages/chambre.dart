@@ -19,7 +19,7 @@ class _ChambrePageState extends State<ChambrePage> {
         leading: IconButton(
           icon: Icon(Icons.arrow_back),
           onPressed: () {
-            Navigator.popAndPushNamed(context, '/login');
+            Navigator.popAndPushNamed(context, '/hotel');
           },
         ),
         backgroundColor: Colors.lightBlue,
@@ -55,7 +55,6 @@ class _ChambrePageState extends State<ChambrePage> {
           return Container(
             padding: EdgeInsets.all(10),
             child: Row(
-
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
                 SizedBox(

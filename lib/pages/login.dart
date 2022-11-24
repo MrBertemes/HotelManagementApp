@@ -38,6 +38,7 @@ class _LoginPageState extends State<LoginPage> {
 
   Future<void> login(String cod, String pin) async {
     codHotel = int.parse(cod);
+    qtAndarHotel = codHotel.isEven ? 10 : 5;
     var pinInt = int.parse(pin);
     hotel = await db.loginHotel(codHotel, pinInt);
     for (var element in hotel) {

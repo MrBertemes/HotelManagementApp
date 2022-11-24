@@ -1,4 +1,5 @@
-// ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables
+// ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables, use_build_context_synchronously
+import 'package:async_button_builder/async_button_builder.dart';
 import 'package:bk/main.dart';
 import 'package:bk/widgets/room.dart';
 import 'package:flutter/material.dart';
@@ -11,11 +12,6 @@ class HotelPage extends StatefulWidget {
 }
 
 class _HotelPageState extends State<HotelPage> {
-  final List<Room> _listRoom = <Room>[
-    Room(numero: 101, andar: 1, preco: 50),
-    Room(numero: 102, andar: 1, preco: 50),
-  ];
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -23,8 +19,8 @@ class _HotelPageState extends State<HotelPage> {
         leading: IconButton(
           icon: Icon(Icons.arrow_back),
           onPressed: () {
-          Navigator.popAndPushNamed(context, '/login');
-        },
+            Navigator.popAndPushNamed(context, '/login');
+          },
         ),
         backgroundColor: Colors.lightBlue,
         title: Column(
@@ -67,20 +63,32 @@ class _HotelPageState extends State<HotelPage> {
                     children: <Widget>[
                       Padding(
                         padding: const EdgeInsets.all(8.0),
-                        child: ElevatedButton(
-                          style: ElevatedButton.styleFrom(
-                            padding: EdgeInsets.all(10.0),
-                            minimumSize: Size(viewportConstraints.maxWidth, 60),
-                            shape: RoundedRectangleBorder(
-                              side:
-                                  BorderSide(color: Colors.blueGrey, width: 2.0),
-                              borderRadius: BorderRadius.circular(8),
-                            ),
-                            backgroundColor: Colors.grey,
-                            elevation: 2.0,
+                        child: AsyncButtonBuilder(
+                          loadingWidget: CircularProgressIndicator(
+                            strokeWidth: 3.0,
                           ),
-                          onPressed: () {
+                          onPressed: () async {
+                            var res = await db.precoTipoQuartos(101, codHotel);
+                            print(res);
                             Navigator.popAndPushNamed(context, '/chambre');
+                          },
+                          builder: (context, child, callback, _) {
+                            return ElevatedButton(
+                              style: ElevatedButton.styleFrom(
+                                padding: EdgeInsets.all(10.0),
+                                minimumSize:
+                                    Size(viewportConstraints.maxWidth, 60),
+                                shape: RoundedRectangleBorder(
+                                  side: BorderSide(
+                                      color: Colors.blueGrey, width: 2.0),
+                                  borderRadius: BorderRadius.circular(8),
+                                ),
+                                backgroundColor: Colors.grey,
+                                elevation: 2.0,
+                              ),
+                              onPressed: callback,
+                              child: child,
+                            );
                           },
                           child: Text(
                             'Quartos',
@@ -95,8 +103,8 @@ class _HotelPageState extends State<HotelPage> {
                             padding: EdgeInsets.all(10.0),
                             minimumSize: Size(viewportConstraints.maxWidth, 60),
                             shape: RoundedRectangleBorder(
-                              side:
-                                  BorderSide(color: Colors.blueGrey, width: 2.0),
+                              side: BorderSide(
+                                  color: Colors.blueGrey, width: 2.0),
                               borderRadius: BorderRadius.circular(8),
                             ),
                             backgroundColor: Colors.grey,
@@ -116,8 +124,8 @@ class _HotelPageState extends State<HotelPage> {
                             padding: EdgeInsets.all(10.0),
                             minimumSize: Size(viewportConstraints.maxWidth, 60),
                             shape: RoundedRectangleBorder(
-                              side:
-                                  BorderSide(color: Colors.blueGrey, width: 2.0),
+                              side: BorderSide(
+                                  color: Colors.blueGrey, width: 2.0),
                               borderRadius: BorderRadius.circular(8),
                             ),
                             backgroundColor: Colors.grey,
@@ -137,8 +145,8 @@ class _HotelPageState extends State<HotelPage> {
                             padding: EdgeInsets.all(10.0),
                             minimumSize: Size(viewportConstraints.maxWidth, 60),
                             shape: RoundedRectangleBorder(
-                              side:
-                                  BorderSide(color: Colors.blueGrey, width: 2.0),
+                              side: BorderSide(
+                                  color: Colors.blueGrey, width: 2.0),
                               borderRadius: BorderRadius.circular(8),
                             ),
                             backgroundColor: Colors.grey,

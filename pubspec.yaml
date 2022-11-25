@@ -38,6 +38,7 @@ dependencies:
   cupertino_icons: ^1.0.2
   async_button_builder: ^2.3.0+1
   postgres: ^2.5.2
+  intl: ^0.17.0
 
 dev_dependencies:
   flutter_test:

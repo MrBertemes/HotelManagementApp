@@ -118,6 +118,7 @@ class _HotelPageState extends State<HotelPage> {
                             strokeWidth: 3.0,
                           ),
                           onPressed: () async {
+                            listReserv = [];
                             var res = await db.reservas(codHotel);
                             for (var e in res) {
                               Reserv reserva = Reserv(
@@ -128,19 +129,15 @@ class _HotelPageState extends State<HotelPage> {
                                   checkout: DateTime.now());
                               for (var v in e.values) {
                                 for (var k in v.keys) {
-                                  if(k=='nrocliente'){
+                                  if (k == 'nrocliente') {
                                     reserva.nrocliente = v[k];
-                                  }
-                                  else if(k=='numquarto'){
+                                  } else if (k == 'numquarto') {
                                     reserva.numquarto = v[k];
-                                  }
-                                  else if(k=='camaextra'){
+                                  } else if (k == 'camaextra') {
                                     reserva.ce = v[k];
-                                  }
-                                  else if(k=='checkin'){
+                                  } else if (k == 'checkin') {
                                     reserva.checkin = v[k];
-                                  }
-                                  else if(k=='checkout'){
+                                  } else if (k == 'checkout') {
                                     reserva.checkout = v[k];
                                   }
                                 }
@@ -230,7 +227,7 @@ class _HotelPageState extends State<HotelPage> {
                             );
                           },
                           child: Text(
-                            'Serviços',
+                            'Limpezas',
                             style: TextStyle(color: Colors.blue[900]),
                           ),
                         ),

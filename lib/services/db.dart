@@ -46,7 +46,7 @@ class DatabaseHelper{
     select r.nrocliente, r.numquarto, e.checkin, e.checkout, r.camaextra 
     from reserva r join estadia e on e.code= r.codestadia 
     where r.codhotel = e.codhotel and r.codhotel = $codh 
-    order by r.numquarto
+    order by e.checkin
     ''');
     return res;
   }

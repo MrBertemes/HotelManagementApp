@@ -35,9 +35,18 @@ class DatabaseHelper{
 
   Future<List<Map<String, Map<String, dynamic>>>> quartoDisponivel(int num, int codh) async {
     DateTime data = DateTime.now();
-    print(data);
     var res = await connection.mappedResultsQuery('''
     select esta_disponivel($num, $codh, '$data');
+    ''');
+    return res;
+  }
+
+  Future<List<Map<String, Map<String, dynamic>>>> reservas(int codh) async{
+    var res = await connection.mappedResultsQuery('''
+    select r.nrocliente, r.numquarto, e.checkin, e.checkout, r.camaextra 
+    from reserva r join estadia e on e.code= r.codestadia 
+    where r.codhotel = e.codhotel and r.codhotel = $codh 
+    order by r.numquarto
     ''');
     return res;
   }

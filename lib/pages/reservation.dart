@@ -1,15 +1,14 @@
-import 'package:bk/widgets/corridor.dart';
 import 'package:flutter/material.dart';
 import 'package:bk/main.dart';
 
-class ChambrePage extends StatefulWidget {
-  const ChambrePage({super.key});
+class ReservaPage extends StatefulWidget {
+  const ReservaPage({super.key});
 
   @override
-  State<ChambrePage> createState() => _ChambrePageState();
+  State<ReservaPage> createState() => _ReservaPageState();
 }
 
-class _ChambrePageState extends State<ChambrePage> {
+class _ReservaPageState extends State<ReservaPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -26,7 +25,7 @@ class _ChambrePageState extends State<ChambrePage> {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             const Text(
-              'Quartos',
+              'Reservas',
               style: TextStyle(
                 fontWeight: FontWeight.bold,
               ),
@@ -42,10 +41,9 @@ class _ChambrePageState extends State<ChambrePage> {
       body: ListView.builder(
         physics: const ScrollPhysics(),
         shrinkWrap: true,
+        itemCount: 1,
         scrollDirection: Axis.vertical,
-        itemCount: qtAndarHotel,
         itemBuilder: (context, index) {
-          iGlobal = index;
           return Container(
             padding: const EdgeInsets.all(10),
             child: Row(
@@ -53,7 +51,7 @@ class _ChambrePageState extends State<ChambrePage> {
               children: [
                 SizedBox(
                   height: 100,
-                  child: Corridor(andar: index + 1),
+                  child: Text('a'),
                 ),
               ],
             ),

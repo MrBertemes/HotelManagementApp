@@ -2,8 +2,10 @@
 
 import 'package:bk/pages/chambre.dart';
 import 'package:bk/pages/hotel.dart';
+import 'package:bk/pages/reservation.dart';
 import 'package:bk/pages/signup.dart';
 import 'package:bk/services/db.dart';
+import 'package:bk/services/reserv.dart';
 import 'package:flutter/material.dart';
 import './pages/splash.dart';
 import './pages/login.dart';
@@ -22,6 +24,7 @@ List<List<double>> matrixPreco = [];
 List<List<int>> matrixNum = [];
 List<List<String>> matrixTipo = [];
 List<List<int>> matrixDisponivel = [];
+List<Reserv> listReserv = [];
 late List<Map<String,Map<String,dynamic>>> quartosHotel ;
 late String telefoneHotel;
 
@@ -70,6 +73,7 @@ class _MainState extends State<Main> {
         '/signup': (context) => const SignupPage(),
         '/hotel': (context) => const HotelPage(),
         '/chambre': (context) => const ChambrePage(),
+        '/reserva':(context) => const ReservaPage(),
       },
     );
   }

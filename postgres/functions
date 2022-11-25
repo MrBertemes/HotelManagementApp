@@ -160,6 +160,20 @@ $$
 language plpgsql;
 
 
+-- retorna 1 se não esta disponivel e 0 se esta disponivel --
+
+create or replace function esta_disponivel(numqt integer, codh integer, dt date) returns integer as
+$$
+declare i integer default 0;
+begin
+	select count(numQuarto) into i from estadia where numQuarto = numqt and codhotel = codh and dt between checkin and checkout;
+	return i;
+end;
+$$
+language plpgsql;
+
+
+
 
 
 

@@ -4,22 +4,23 @@ import 'package:flutter/material.dart';
 
 class Room extends StatelessWidget {
   int numero;
-  int andar;
+  String tipo;
   double preco;
   Room(
       {super.key,
       required this.numero,
-      required this.andar,
+      required this.tipo,
       required this.preco});
 
   @override
   Widget build(BuildContext context) {
     return Container(
+      padding: const EdgeInsets.all(4),
       alignment: AlignmentDirectional.center,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(12),
         border: Border.all(
-          color: Colors.grey,
+          color: matrixDisponivel[iGlobal][jGlobal] == 0 ?Colors.green : Colors.grey,
           width: 3,
         ),
       ),
@@ -31,13 +32,13 @@ class Room extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
                 Text(
-                  '${andar*100+numero}',
+                  '${matrixNum[iGlobal][jGlobal]}',
                   style: Theme.of(context).textTheme.headline6,
                 ),
-                Text('Preco')
+                Text(' - Preço: ${matrixPreco[iGlobal][jGlobal]}')
               ],
             ),
-            Text('tipo')
+            Text('Tipo: ${matrixTipo[iGlobal][jGlobal]}'),
           ],
         ),
       ),

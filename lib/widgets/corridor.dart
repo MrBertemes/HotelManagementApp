@@ -1,4 +1,5 @@
 // ignore_for_file: must_be_immutable, prefer_const_constructors
+import 'package:bk/main.dart';
 import 'package:bk/widgets/room.dart';
 import 'package:flutter/material.dart';
 
@@ -30,8 +31,9 @@ int get qtQuartos {
       scrollDirection: Axis.horizontal,
       itemCount: qtQuartos,
       itemBuilder: (context, index) {
+        jGlobal = index;
         return Card(
-          child: Room(andar: widget.andar,numero: index+1, preco: 0),
+          child: Room(tipo: 'S', numero: index+1, preco: 0),
         );
       },
     );

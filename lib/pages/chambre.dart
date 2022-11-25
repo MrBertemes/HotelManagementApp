@@ -52,6 +52,7 @@ class _ChambrePageState extends State<ChambrePage> {
         scrollDirection: Axis.vertical,
         itemCount: qtAndarHotel,
         itemBuilder: (context, index) {
+          iGlobal = index;
           return Container(
             padding: EdgeInsets.all(10),
             child: Row(

@@ -25,11 +25,20 @@ class DatabaseHelper{
     return s;
   }
 
-  Future<List<Map<String, Map<String, dynamic>>>> precoTipoQuartos(int num,int cod) async{
+  Future<List<Map<String, Map<String, dynamic>>>> precoTipoQuartos(int cod) async{
     var qts = await connection.mappedResultsQuery('''
-    select preco, tipo from quartohotel where codhotel = $cod and numquarto = $num;
+    select numquarto, preco, tipo from quartohotel where codhotel = $cod order by numquarto;
     ''');
     return qts;
+
+  }
+
+  Future<List<Map<String, Map<String, dynamic>>>> quartoDisponivel(int num, int codh) async {
+    DateTime data = DateTime.now();
+    var res = await connection.mappedResultsQuery('''
+    select esta_disponivel($num, $codh, $data);
+    ''');
+    return res;
   }
 
 }

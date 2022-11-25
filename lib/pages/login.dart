@@ -37,6 +37,8 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   Future<void> login(String cod, String pin) async {
+    iGlobal = 0;
+    jGlobal = 0;
     codHotel = int.parse(cod);
     qtAndarHotel = codHotel.isEven ? 10 : 5;
     var pinInt = int.parse(pin);
@@ -135,7 +137,7 @@ class _LoginPageState extends State<LoginPage> {
                               }
                               return null;
                             },
-                            keyboardType: TextInputType.number,
+                            keyboardType: TextInputType.text,
                           ),
                           Padding(padding: EdgeInsets.all(8.0)),
                           TextFormField(
@@ -177,7 +179,7 @@ class _LoginPageState extends State<LoginPage> {
                             },
                             enableSuggestions: false,
                             autocorrect: false,
-                            keyboardType: TextInputType.number,
+                            keyboardType: TextInputType.text,
                           ),
                           // Padding(padding: EdgeInsets.all(10.0)),
                           Padding(padding: EdgeInsets.all(30.0)),

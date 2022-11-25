@@ -16,10 +16,33 @@ late String enderecoHotel;
 late String numHotel;
 late int codHotel;
 late int qtAndarHotel;
+late int iGlobal;
+late int jGlobal;
+List<List<double>> matrixPreco = [];
+List<List<int>> matrixNum = [];
+List<List<String>> matrixTipo = [];
+List<List<int>> matrixDisponivel = [];
 late List<Map<String,Map<String,dynamic>>> quartosHotel ;
 late String telefoneHotel;
 
 void main() async {
+
+  for (var i = 0; i < 10; i++) {
+    List<int> listNum = <int>[];
+    List<double> listPreco = <double>[];
+    List<String> listTipo = <String>[];
+    List<int> listDisp = <int>[];
+    for (var j = 0; j < 10; j++) {
+      listPreco.add(0.0);
+      listTipo.add('');
+      listNum.add(0);
+      listDisp.add(0);
+    }
+    matrixPreco.add(listPreco);
+    matrixTipo.add(listTipo);
+    matrixNum.add(listNum);
+    matrixDisponivel.add(listDisp);
+  }
   WidgetsFlutterBinding.ensureInitialized();
   runApp(
     MaterialApp(

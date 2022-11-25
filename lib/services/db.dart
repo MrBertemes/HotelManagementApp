@@ -35,10 +35,10 @@ class DatabaseHelper{
 
   Future<List<Map<String, Map<String, dynamic>>>> quartoDisponivel(int num, int codh) async {
     DateTime data = DateTime.now();
+    print(data);
     var res = await connection.mappedResultsQuery('''
-    select esta_disponivel($num, $codh, $data);
+    select esta_disponivel($num, $codh, '$data');
     ''');
     return res;
   }
-
 }

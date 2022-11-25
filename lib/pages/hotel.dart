@@ -69,15 +69,21 @@ class _HotelPageState extends State<HotelPage> {
                           ),
                           onPressed: () async {
                             var res = await db.precoTipoQuartos(codHotel);
-                            for(var e in res){
+                            for (var e in res) {
                               var i = 0;
-                              for(var k in e.values){
-                                var andar = k['numquarto']~/100;
-                                var qt = k['numquarto']%100;
-                                matrixPreco[andar-1][qt-1] = k['preco'];
-                                matrixTipo[andar-1][qt-1] = k['tipo'];
-                                matrixNum[andar-1][qt-1] = k['numquarto'];
-                                var disp = await db.quartoDisponivel(k['numquarto'], codHotel);
+                              for (var k in e.values) {
+                                var andar = k['numquarto'] ~/ 100;
+                                var qt = k['numquarto'] % 100;
+                                matrixPreco[andar - 1][qt - 1] = k['preco'];
+                                matrixTipo[andar - 1][qt - 1] = k['tipo'];
+                                matrixNum[andar - 1][qt - 1] = k['numquarto'];
+                                var disp = await db.quartoDisponivel(
+                                    k['numquarto'], codHotel);
+                                for (var q in disp.first.values) {
+                                  for(var v in q.keys){
+                                    matrixDisponivel[andar - 1][qt - 1] = q[v];
+                                  }
+                                }
                               }
                             }
                             Navigator.popAndPushNamed(context, '/chambre');

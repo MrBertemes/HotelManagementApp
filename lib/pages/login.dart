@@ -38,6 +38,8 @@ class _LoginPageState extends State<LoginPage> {
 
   Future<void> login(String cod, String pin) async {
     listReserv = [];
+    listStay = [];
+    listCliente = [];
     iGlobal = 0;
     jGlobal = 0;
     codHotel = int.parse(cod);

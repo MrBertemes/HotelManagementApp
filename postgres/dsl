@@ -22,7 +22,8 @@ create table if not exists clientes (
 	nro integer primary key,
 	nome varchar(50) not null,
 	endereco varchar(100) not null,
-	telefone varchar(15) not null
+	telefone varchar(15) not null,
+	cpf varchar(11) not null
 );
 
 create table if not exists quartos (

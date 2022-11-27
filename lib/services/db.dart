@@ -1,3 +1,6 @@
+// ignore_for_file: non_constant_identifier_names
+
+import 'package:flutter/widgets.dart';
 import 'package:postgres/postgres.dart';
 
 class DatabaseHelper {
@@ -51,8 +54,8 @@ class DatabaseHelper {
 
   Future<List<Map<String, Map<String, dynamic>>>> reservas(int codh) async {
     var res = await connection.mappedResultsQuery('''
-    select r.nrocliente, r.numquarto, e.checkin, e.checkout, r.camaextra 
-    from reserva r join estadia e on e.code= r.codestadia 
+    select c.cpf, r.numquarto, e.checkin, e.checkout, r.camaextra 
+    from reserva r join estadia e on e.code= r.codestadia join clientes c on c.nro = r.nrocliente   
     where r.codhotel = e.codhotel and r.codhotel = $codh 
     order by e.checkin
     ''');
@@ -62,12 +65,12 @@ class DatabaseHelper {
   Future<PostgreSQLResult> cadastrarReserva(
       int numquarto,
       int codh,
-      int nrocliente,
+      String cpf,
       String camaextra,
       DateTime checkin,
       DateTime checkout) async {
     var res = await connection.query('''
-        select cadastrar_reserva($numquarto, $codh, $nrocliente,  '$camaextra', '$checkin', '$checkout');
+        select cadastrar_reserva($numquarto, $codh, '$cpf',  '$camaextra', '$checkin', '$checkout');
         ''');
     return res;
   }
@@ -75,8 +78,41 @@ class DatabaseHelper {
   Future<List<Map<String, Map<String, dynamic>>>> estadias(int codh) async {
     DateTime data = DateTime.now();
     var res = await connection.mappedResultsQuery('''
-    
+    select checkin, checkout, cpf, numquarto from estadia join clientes on nrocliente=nro where code not in (select codestadia from reserva) and codhotel = $codh and '$data' between checkin and checkout
+    union
+    select e.checkin, e.checkout, c.cpf, e.numquarto from estadia e join reserva r on code = codestadia join clientes c on e.nrocliente=c.nro and e.codhotel = $codh and '$data' between checkin and checkout
     ''');
     return res;
   }
+
+  Future<PostgreSQLResult> cadastrarEstadia(DateTime cckin, DateTime cckout,
+      String cpf, int numquarto, int codh) async {
+    var res = await connection.query('''
+    select cadastrar_estadia('$cckin','$cckout', '$cpf', $numquarto, $codh);
+    ''');
+    return res;
+  }
+
+  Future<List<Map<String, Map<String, dynamic>>>> get_clientes() async {
+    var res = await connection.mappedResultsQuery('''
+    select nome, endereco, telefone, cpf from clientes;
+    ''');
+    return res;
+  }
+
+  Future<PostgreSQLResult> cadastrarCliente(
+      String nome, String endereco, String telefone, String cpf) async {
+        var res = await connection.query('''
+        select cadastrar_cliente('$nome', '$endereco', '$telefone','$cpf');
+        ''');
+        return res;
+      }
+
+  Future<PostgreSQLResult> setPreco(double  single, double duplo, double casal, double suite, int codh) async {
+    var res = await connection.query('''
+    select set_valor($single, $duplo, $casal, $suite, $codh);
+    ''');
+    return res;
+  }
+
 }

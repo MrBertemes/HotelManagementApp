@@ -2,6 +2,7 @@
 
 import 'package:async_button_builder/async_button_builder.dart';
 import 'package:bk/services/reserv.dart';
+import 'package:bk/services/stay.dart';
 import 'package:flutter/material.dart';
 import 'package:bk/main.dart';
 import 'package:intl/intl.dart';
@@ -16,7 +17,7 @@ class EstadiaPage extends StatefulWidget {
 class _EstadiaPageState extends State<EstadiaPage> {
   final camaExtra = ValueNotifier('');
   final camaOpcoes = <String>['Sim', 'Não'];
-  late final TextEditingController _idcliente;
+  late final TextEditingController _cpf;
   late final TextEditingController _qt;
   late final TextEditingController _ce;
   late final TextEditingController _checkin;
@@ -24,7 +25,7 @@ class _EstadiaPageState extends State<EstadiaPage> {
 
   @override
   void initState() {
-    _idcliente = TextEditingController();
+    _cpf = TextEditingController();
     _qt = TextEditingController();
     _ce = TextEditingController();
     _checkin = TextEditingController();
@@ -34,7 +35,7 @@ class _EstadiaPageState extends State<EstadiaPage> {
 
   @override
   void dispose() {
-    _idcliente.dispose();
+    _cpf.dispose();
     _qt.dispose();
     _ce.dispose();
     _checkin.dispose();
@@ -74,7 +75,7 @@ class _EstadiaPageState extends State<EstadiaPage> {
       body: ListView.builder(
         physics: const ScrollPhysics(),
         shrinkWrap: true,
-        itemCount: listReserv.length,
+        itemCount: listStay.length,
         scrollDirection: Axis.vertical,
         itemBuilder: (context, index) {
           return Container(
@@ -98,23 +99,18 @@ class _EstadiaPageState extends State<EstadiaPage> {
                       children: [
                         Row(
                           children: [
-                            Text('Cliente:${listReserv[index].nrocliente}'),
+                            Text('Cliente:${listStay[index].cpf}'),
                             const Text(' - '),
-                            Text('Quarto: ${listReserv[index].numquarto}'),
+                            Text('Quarto: ${listStay[index].numquarto}'),
                           ],
                         ),
                         Row(
                           children: [
-                            Column(
-                              children: [
-                                Text(
-                                    'Checkin: ${DateFormat.yMMMd().format(listReserv[index].checkin)}'),
-                                Text(
-                                    'Checkout: ${DateFormat.yMMMd().format(listReserv[index].checkout)}'),
-                              ],
-                            ),
+                            Text(
+                                'Checkin: ${DateFormat.yMMMd().format(listStay[index].checkin)}'),
                             const Text('    '),
-                            Text('Cama Extra: ${listReserv[index].ce}'),
+                            Text(
+                                'Checkout: ${DateFormat.yMMMd().format(listStay[index].checkout)}'),
                           ],
                         ),
                       ],
@@ -133,16 +129,16 @@ class _EstadiaPageState extends State<EstadiaPage> {
             builder: (BuildContext context) {
               return AlertDialog(
                 scrollable: true,
-                title: const Text('Nova Reserva'),
+                title: const Text('Nova Estadia'),
                 content: Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: Form(
                     child: Column(
                       children: <Widget>[
                         TextFormField(
-                          controller: _idcliente,
+                          controller: _cpf,
                           decoration: const InputDecoration(
-                            labelText: 'ID cliente',
+                            labelText: 'CPF',
                             icon: Icon(Icons.account_circle_outlined),
                           ),
                           keyboardType: TextInputType.text,
@@ -169,9 +165,8 @@ class _EstadiaPageState extends State<EstadiaPage> {
                             DateTime? pickedDate = await showDatePicker(
                                 context: context,
                                 initialDate: DateTime.now(),
-                                firstDate: DateTime(
-                                    2000), //DateTime.now() - not to allow to choose before today.
-                                lastDate: DateTime(2101));
+                                firstDate: DateTime.now(),
+                                lastDate: DateTime(2100));
 
                             if (pickedDate != null) {
                               String formattedDate =
@@ -190,17 +185,18 @@ class _EstadiaPageState extends State<EstadiaPage> {
                           decoration: const InputDecoration(
                               icon: Icon(
                                   Icons.calendar_today), //icon of text field
-                              labelText: "Checkin" //label text of field
+                              labelText: "Checkout" //label text of field
                               ),
                           readOnly:
                               true, //set it true, so that user will not able to edit text
                           onTap: () async {
                             DateTime? pickedDate = await showDatePicker(
                                 context: context,
-                                initialDate: DateTime.now(),
-                                firstDate: DateTime(
-                                    2000), //DateTime.now() - not to allow to choose before today.
-                                lastDate: DateTime(2101));
+                                initialDate:
+                                    DateTime.now().add(const Duration(days: 1)),
+                                firstDate:
+                                    DateTime.now().add(const Duration(days: 1)),
+                                lastDate: DateTime(2100));
 
                             if (pickedDate != null) {
                               String formattedDate =
@@ -212,29 +208,6 @@ class _EstadiaPageState extends State<EstadiaPage> {
                               });
                             }
                           },
-                        ),
-                        SizedBox(
-                          child: ValueListenableBuilder(
-                            valueListenable: camaExtra,
-                            builder: (BuildContext context, String value, _) {
-                              return DropdownButton<String>(
-                                hint: const Text("Cama Extra"),
-                                value: (value.isEmpty ? null : value),
-                                onChanged: camaOpcoes.isNotEmpty
-                                    ? (escolha) =>
-                                        camaExtra.value = escolha.toString()
-                                    : null,
-                                items: camaOpcoes
-                                    .map(
-                                      (op) => DropdownMenuItem(
-                                        value: op,
-                                        child: Text(op),
-                                      ),
-                                    )
-                                    .toList(),
-                              );
-                            },
-                          ),
                         ),
                       ],
                     ),
@@ -252,21 +225,20 @@ class _EstadiaPageState extends State<EstadiaPage> {
                       strokeWidth: 3.0,
                     ),
                     onPressed: () async {
-                      Reserv novaReserva = Reserv(
-                          nrocliente: int.parse(_idcliente.text),
+                      Stay novaStay = Stay(
+                          cpf: _cpf.text,
                           numquarto: int.parse(_qt.text),
-                          ce: camaExtra.value,
                           checkin: DateTime.parse(_checkin.text),
                           checkout: DateTime.parse(_checkout.text));
-                      // var res = await db.cadastrarReserva(
-                      //     novaReserva.numquarto,
-                      //     codHotel,
-                      //     novaReserva.nrocliente,
-                      //     novaReserva.ce,
-                      //     novaReserva.checkin,
-                      //     novaReserva.checkout);
+                      var res = await db.cadastrarEstadia(
+                          novaStay.checkin,
+                          novaStay.checkout,
+                          novaStay.cpf,
+                          novaStay.numquarto,
+                          codHotel);
+                      print(res);
                       setState(() {
-                        listReserv.add(novaReserva);
+                        listStay.add(novaStay);
                       });
                       Navigator.pop(context);
                     },

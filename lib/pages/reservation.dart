@@ -17,7 +17,7 @@ class ReservaPage extends StatefulWidget {
 class _ReservaPageState extends State<ReservaPage> {
   final camaExtra = ValueNotifier('');
   final camaOpcoes = <String>['Sim', 'Não'];
-  late final TextEditingController _idcliente;
+  late final TextEditingController _cpf;
   late final TextEditingController _qt;
   late final TextEditingController _ce;
   late final TextEditingController _checkin;
@@ -25,7 +25,7 @@ class _ReservaPageState extends State<ReservaPage> {
 
   @override
   void initState() {
-    _idcliente = TextEditingController();
+    _cpf = TextEditingController();
     _qt = TextEditingController();
     _ce = TextEditingController();
     _checkin = TextEditingController();
@@ -35,7 +35,7 @@ class _ReservaPageState extends State<ReservaPage> {
 
   @override
   void dispose() {
-    _idcliente.dispose();
+    _cpf.dispose();
     _qt.dispose();
     _ce.dispose();
     _checkin.dispose();
@@ -99,7 +99,7 @@ class _ReservaPageState extends State<ReservaPage> {
                       children: [
                         Row(
                           children: [
-                            Text('Cliente:${listReserv[index].nrocliente}'),
+                            Text('Cliente: ${listReserv[index].cpf}'),
                             const Text(' - '),
                             Text('Quarto: ${listReserv[index].numquarto}'),
                           ],
@@ -141,9 +141,9 @@ class _ReservaPageState extends State<ReservaPage> {
                     child: Column(
                       children: <Widget>[
                         TextFormField(
-                          controller: _idcliente,
+                          controller: _cpf,
                           decoration: const InputDecoration(
-                            labelText: 'ID cliente',
+                            labelText: 'CPF',
                             icon: Icon(Icons.account_circle_outlined),
                           ),
                           keyboardType: TextInputType.text,
@@ -197,8 +197,8 @@ class _ReservaPageState extends State<ReservaPage> {
                           onTap: () async {
                             DateTime? pickedDate = await showDatePicker(
                                 context: context,
-                                initialDate: DateTime.now().add(Duration(days: 1)),
-                                firstDate: DateTime.now().add(Duration(days: 1)),
+                                initialDate: DateTime.now().add(const Duration(days: 1)),
+                                firstDate: DateTime.now().add(const Duration(days: 1)),
                                 lastDate: DateTime(2100));
 
                             if (pickedDate != null) {
@@ -252,7 +252,7 @@ class _ReservaPageState extends State<ReservaPage> {
                     ),
                     onPressed: () async {
                       Reserv novaReserva = Reserv(
-                          nrocliente: int.parse(_idcliente.text),
+                          cpf: _cpf.text,
                           numquarto: int.parse(_qt.text),
                           ce: camaExtra.value,
                           checkin: DateTime.parse(_checkin.text),
@@ -260,7 +260,7 @@ class _ReservaPageState extends State<ReservaPage> {
                       var res = await db.cadastrarReserva(
                           novaReserva.numquarto,
                           codHotel,
-                          novaReserva.nrocliente,
+                          novaReserva.cpf,
                           novaReserva.ce,
                           novaReserva.checkin,
                           novaReserva.checkout);

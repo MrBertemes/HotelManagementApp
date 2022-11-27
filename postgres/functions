@@ -37,18 +37,18 @@ $$
 language plpgsql;
 
 create trigger cadastra_quartos after insert on hotel
-	for each row execute procedure cadastra_quartos()
+	for each row execute procedure cadastra_quartos();
 	
 ------------------------------------------------------------------------------------------------------
 -- vai gerar nro a partir de 10 --
-create or replace function cadastrar_cliente(nome text, endereco text, telefone text) returns void as
+create or replace function cadastrar_cliente(nome text, endereco text, telefone text, cpf text) returns void as
 $$
 declare maxNro integer default 9;
 begin
 	if (select count(nro) from clientes) > 0 then
 		select max(nro) into maxNro from clientes;
 	end if;
-	insert into clientes values (maxNro+1, nome, endereco, telefone);
+	insert into clientes values (maxNro+1, nome, endereco, telefone, cpf);
 end;
 $$
 language plpgsql;
@@ -56,12 +56,12 @@ language plpgsql;
 ---------------------------------------------------------------------------------------------------------
 -- sempre que um novo hotel for criado o preço dos quartos deve ser setado --
 
-create or replace function set_valor(single float, duplo float, casal float, suite float) returns void as
+create or replace function set_valor(single float, duplo float, casal float, suite float, codh integer) returns void as
 $$
-	update quartoHotel set preco = single where tipo = 'single';
-	update quartoHotel set preco = duplo where tipo = 'duplo';
-	update quartoHotel set preco = casal where tipo = 'casal';
-	update quartoHotel set preco = suite where tipo = 'suite';
+	update quartoHotel set preco = single where tipo = 'single' and codhotel = codh;
+	update quartoHotel set preco = duplo where tipo = 'duplo' and codhotel = codh;
+	update quartoHotel set preco = casal where tipo = 'casal' and codhotel = codh;
+	update quartoHotel set preco = suite where tipo = 'suite' and codhotel = codh;
 $$
 language sql;
 
@@ -81,9 +81,9 @@ language sql;
 
 create or replace function quartos_disponiveis(dtcheckin date, dtcheckout date, codh integer) returns table(num integer, andar integer, tipo text, preco float) as
 $$
-    select num, andar, tipo, preco from quartohotel join quartos on numquarto = num
-        where codhotel = codh and (numquarto, codhotel) not in (select numquarto, codhotel from estadia e
-                                      where e.codhotel = codh and ((dtcheckout between checkin and checkout) or (dtcheckin between checkin and checkout) or (dtcheckin < checkin and dtcheckout > checkout)));
+	select num, andar, tipo, preco from quartohotel join quartos on numquarto = num
+		where codhotel = codh and (numquarto, codhotel) not in (select numquarto, codhotel from estadia e
+									  where e.codhotel = codh and ((dtcheckout between checkin and checkout) or (dtcheckin between checkin and checkout) or (dtcheckin < checkin and dtcheckout > checkout)));
 $$
 language sql;
 
@@ -92,7 +92,7 @@ language sql;
 
 create or replace function empregado_disponivel(dt date, ncodhotel integer) returns table(nro integer, nome text) as
 $$
-	select * from empregados where nro not in (select nro from empregados join limpeza on nroempregado = nro
+	select nro, nome from empregados where nro not in (select nro from empregados join limpeza on nroempregado = nro
 						       where codh = ncodhotel and data = dt) and codhotel = ncodhotel;
 $$
 language sql;
@@ -100,13 +100,19 @@ language sql;
 -----------------------------------------------------------------------------------------------------------
 -- cadastrar reserva. Ao cadastrar uma reserva ele também gera uma estadia automaticamente --
 
-create or replace function cadastrar_reserva(numquarto integer, codh integer, nrocliente integer, camaextra text, checkin date, checkout date) returns void as
+create or replace function cadastrar_reserva(numquarto integer, codh integer, cpfCliente text, camaextra text, checkin date, checkout date) returns void as
 $$
 declare idreserva integer default 0;
 		codestadia integer default 0;
+		nrocliente integer;
 begin
+	select nro into nrocliente from clientes where cpf = cpfCliente;
 	if (select count(id) from reserva) > 0 then
 		select max(id) into idreserva from reserva;
+		if (select count(code) from estadia) > 0 then
+			select max(code) into codestadia from estadia;
+		end if;
+	else  
 		if (select count(code) from estadia) > 0 then
 			select max(code) into codestadia from estadia;
 		end if;
@@ -117,7 +123,6 @@ begin
 end;
 $$
 language plpgsql;
-
 ------------------------------------------------------------------------------------------------------------
 -- cadastrar servico --
 
@@ -132,7 +137,6 @@ begin
 end;
 $$
 language plpgsql;
-
 ------------------------------------------------------------------------------------------------------------
 -- calcular o valor de uma estadia pelo codigo --
 
@@ -200,5 +204,46 @@ create trigger trigger_estadia before insert or update on estadia
     for each row execute procedure trigger_estadia();
 
 
+create or replace function cpf_cliente() returns trigger as
+$$
+begin
+	if TG_OP = 'UPDATE' then
+		if (select count(nro) from clientes where cpf = new.cpf and cpf != old.cpf) then
+			raise exception 'Já existe cliente cadastrado com este cpf!';
+			return old;
+		end if;
+	else
+		if (select count(nro) from clientes where cpf = new.cpf and cpf != old.cpf) then
+			raise exception 'Já existe cliente cadastrado com este cpf!';
+		end if;
+	end if;
+	return new;
+end;
+$$
+language plpgsql;
+
+create trigger cpf_cliente before insert or update on clientes
+	for each row execute procedure cpf_cliente();
 
 
+create or replace function get_estadias(codh int, dt date) returns table(checkin date, checkout date, nrocliente int, numquarto int) as
+$$
+    select checkin, checkout, nrocliente, numquarto from estadia where code not in (select codestadia from reserva) and codhotel = codh and dt between checkin and checkout
+    union
+    select e.checkin, e.checkout, r.nrocliente, e.numquarto from estadia e join reserva r on code = codestadia and e.codhotel = codh and dt between checkin and checkout
+$$
+language sql;
+
+create or replace function cadastrar_estadia(dtcheckin date, dtcheckout date, cpfcliente text, numquarto integer, codh integer) returns void as
+$$
+declare cont integer default 0;
+        numcliente integer;
+begin
+    select nro into numcliente from clientes where cpf = cpfcliente;
+	if (select count(code) from estadia) > 0 then
+    	select max(code) into cont from estadia;
+	end if;
+    insert into estadia values(cont+1, dtcheckin, dtcheckout, numcliente, codh, numquarto);
+end;
+$$
+language plpgsql;

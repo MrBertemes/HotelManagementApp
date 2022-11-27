@@ -7,9 +7,12 @@ import 'package:bk/pages/reservation.dart';
 import 'package:bk/pages/signup.dart';
 import 'package:bk/services/db.dart';
 import 'package:bk/services/reserv.dart';
+import 'package:bk/services/stay.dart';
 import 'package:flutter/material.dart';
 import './pages/splash.dart';
 import './pages/login.dart';
+import 'pages/clientela.dart';
+import 'services/client.dart';
 
 String _defaultHome = '/login';
 DatabaseHelper db = DatabaseHelper();
@@ -26,6 +29,8 @@ List<List<int>> matrixNum = [];
 List<List<String>> matrixTipo = [];
 List<List<int>> matrixDisponivel = [];
 List<Reserv> listReserv = [];
+List<Stay> listStay = [];
+List<Client> listCliente = [];
 late List<Map<String,Map<String,dynamic>>> quartosHotel ;
 late String telefoneHotel;
 
@@ -76,6 +81,7 @@ class _MainState extends State<Main> {
         '/chambre': (context) => const ChambrePage(),
         '/reserva':(context) => const ReservaPage(),
         '/estadia':(context) => const EstadiaPage(),
+        '/client':(context) => const ClientelaPage()
       },
     );
   }

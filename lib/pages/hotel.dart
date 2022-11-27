@@ -1,7 +1,9 @@
 // ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables, use_build_context_synchronously
 import 'package:async_button_builder/async_button_builder.dart';
 import 'package:bk/main.dart';
+import 'package:bk/services/client.dart';
 import 'package:bk/services/reserv.dart';
+import 'package:bk/services/stay.dart';
 import 'package:flutter/material.dart';
 
 class HotelPage extends StatefulWidget {
@@ -120,17 +122,18 @@ class _HotelPageState extends State<HotelPage> {
                           onPressed: () async {
                             listReserv = [];
                             var res = await db.reservas(codHotel);
+                            print(res);
                             for (var e in res) {
                               Reserv reserva = Reserv(
-                                  nrocliente: 0,
+                                  cpf: '',
                                   numquarto: 0,
                                   ce: 's',
                                   checkin: DateTime.now(),
                                   checkout: DateTime.now());
                               for (var v in e.values) {
                                 for (var k in v.keys) {
-                                  if (k == 'nrocliente') {
-                                    reserva.nrocliente = v[k];
+                                  if (k == 'cpf') {
+                                    reserva.cpf = v[k];
                                   } else if (k == 'numquarto') {
                                     reserva.numquarto = v[k];
                                   } else if (k == 'camaextra') {
@@ -177,6 +180,29 @@ class _HotelPageState extends State<HotelPage> {
                             strokeWidth: 3.0,
                           ),
                           onPressed: () async {
+                            listStay = [];
+                            var res = await db.estadias(codHotel);
+                            for (var e in res) {
+                              Stay st = Stay(
+                                  cpf: '',
+                                  numquarto: 0,
+                                  checkin: DateTime.now(),
+                                  checkout: DateTime.now());
+                              for (var v in e.values) {
+                                for (var k in v.keys) {
+                                  if (k == 'cpf') {
+                                    st.cpf = v[k];
+                                  } else if (k == 'numquarto') {
+                                    st.numquarto = v[k];
+                                  } else if (k == 'checkin') {
+                                    st.checkin = v[k];
+                                  } else if (k == 'checkout') {
+                                    st.checkout = v[k];
+                                  }
+                                }
+                              }
+                              listStay.add(st);
+                            }
                             Navigator.popAndPushNamed(context, '/estadia');
                           },
                           builder: (context, child, callback, _) {
@@ -209,7 +235,33 @@ class _HotelPageState extends State<HotelPage> {
                           loadingWidget: CircularProgressIndicator(
                             strokeWidth: 3.0,
                           ),
-                          onPressed: () async {},
+                          onPressed: () async {
+                            listCliente = [];
+                            var res = await db.get_clientes();
+                            for (var e in res) {
+                              Client cl = Client(
+                                cpf: '',
+                                nome: '',
+                                endereco: '',
+                                telefone: '',
+                              );
+                              for (var v in e.values) {
+                                for (var k in v.keys) {
+                                  if (k == 'cpf') {
+                                    cl.cpf = v[k];
+                                  } else if (k == 'nome') {
+                                    cl.nome = v[k];
+                                  } else if (k == 'endereco') {
+                                    cl.endereco = v[k];
+                                  } else if (k == 'telefone') {
+                                    cl.telefone = v[k];
+                                  }
+                                }
+                              }
+                              listCliente.add(cl);
+                            }
+                            Navigator.popAndPushNamed(context, '/client');
+                          },
                           builder: (context, child, callback, _) {
                             return ElevatedButton(
                               style: ElevatedButton.styleFrom(
@@ -229,7 +281,7 @@ class _HotelPageState extends State<HotelPage> {
                             );
                           },
                           child: Text(
-                            'Limpezas',
+                            'Clientes',
                             style: TextStyle(color: Colors.blue[900]),
                           ),
                         ),

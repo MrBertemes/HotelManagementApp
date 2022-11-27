@@ -1,6 +1,7 @@
 // ignore_for_file: prefer_const_constructors, sort_child_properties_last, use_build_context_synchronously
 
 import 'package:async_button_builder/async_button_builder.dart';
+import 'package:bk/main.dart';
 import 'package:bk/services/db.dart';
 import 'package:flutter/material.dart';
 
@@ -17,6 +18,10 @@ class _SignupPageState extends State<SignupPage> {
   late final TextEditingController _nome;
   late final TextEditingController _end;
   late final TextEditingController _tel;
+  late final TextEditingController _single;
+  late final TextEditingController _duplo;
+  late final TextEditingController _casal;
+  late final TextEditingController _suite;
   DatabaseHelper db = DatabaseHelper();
 
   bool _hidePin = true;
@@ -31,6 +36,10 @@ class _SignupPageState extends State<SignupPage> {
     _nome = TextEditingController();
     _end = TextEditingController();
     _tel = TextEditingController();
+    _single = TextEditingController();
+    _duplo = TextEditingController();
+    _casal = TextEditingController();
+    _suite = TextEditingController();
     super.initState();
   }
 
@@ -41,12 +50,23 @@ class _SignupPageState extends State<SignupPage> {
     _nome.dispose();
     _end.dispose();
     _tel.dispose();
+    _single.dispose();
+    _duplo.dispose();
+    _casal.dispose();
+    _suite.dispose();
     super.dispose();
   }
 
   Future<void> cadastroHotel(
       int cod, int pin, String nome, String end, String tel) async {
     var res = await db.cadastroHotel(cod, pin, nome, end, tel);
+    var res2 = await db.setPreco(
+      double.parse(_single.text),
+      double.parse(_duplo.text),
+      double.parse(_casal.text),
+      double.parse(_suite.text),
+      int.parse(_cod.text),
+    );
     Navigator.popAndPushNamed(context, '/login');
   }
 
@@ -134,17 +154,11 @@ class _SignupPageState extends State<SignupPage> {
                                   : Icons.visibility),
                             ),
                           ),
-                          // autovalidateMode: AutovalidateMode.always,
-                          // validator: (text) {
-                          //   if (_invalidPin) {
-                          //     return '*Pin inválido';
-                          //   }
-                          //   return null;
-                          // },
                           enableSuggestions: false,
                           autocorrect: false,
                           keyboardType: TextInputType.number,
                         ),
+                        Padding(padding: EdgeInsets.all(8.0)),
                         TextFormField(
                           controller: _nome,
                           decoration: InputDecoration(
@@ -164,6 +178,7 @@ class _SignupPageState extends State<SignupPage> {
                           ),
                           keyboardType: TextInputType.text,
                         ),
+                        Padding(padding: EdgeInsets.all(8.0)),
                         TextFormField(
                           controller: _end,
                           decoration: InputDecoration(
@@ -183,11 +198,92 @@ class _SignupPageState extends State<SignupPage> {
                           ),
                           keyboardType: TextInputType.text,
                         ),
+                        Padding(padding: EdgeInsets.all(8.0)),
                         TextFormField(
                           controller: _tel,
                           decoration: InputDecoration(
                             label: Text(
                               'Telefone',
+                            ),
+                            enabledBorder: UnderlineInputBorder(
+                              borderSide: BorderSide(
+                                width: 2,
+                              ),
+                            ),
+                            focusedBorder: UnderlineInputBorder(
+                              borderSide: BorderSide(
+                                width: 3,
+                              ),
+                            ),
+                          ),
+                          keyboardType: TextInputType.text,
+                        ),
+                        Padding(padding: EdgeInsets.all(8.0)),
+                        TextFormField(
+                          controller: _single,
+                          decoration: InputDecoration(
+                            label: Text(
+                              'Valor Single',
+                            ),
+                            enabledBorder: UnderlineInputBorder(
+                              borderSide: BorderSide(
+                                width: 2,
+                              ),
+                            ),
+                            focusedBorder: UnderlineInputBorder(
+                              borderSide: BorderSide(
+                                width: 3,
+                              ),
+                            ),
+                          ),
+                          keyboardType: TextInputType.text,
+                        ),
+                        Padding(padding: EdgeInsets.all(8.0)),
+                        TextFormField(
+                          controller: _duplo,
+                          decoration: InputDecoration(
+                            label: Text(
+                              'Valor Duplo',
+                            ),
+                            enabledBorder: UnderlineInputBorder(
+                              borderSide: BorderSide(
+                                width: 2,
+                              ),
+                            ),
+                            focusedBorder: UnderlineInputBorder(
+                              borderSide: BorderSide(
+                                width: 3,
+                              ),
+                            ),
+                          ),
+                          keyboardType: TextInputType.text,
+                        ),
+                        Padding(padding: EdgeInsets.all(8.0)),
+                        TextFormField(
+                          controller: _casal,
+                          decoration: InputDecoration(
+                            label: Text(
+                              'Valor Casal',
+                            ),
+                            enabledBorder: UnderlineInputBorder(
+                              borderSide: BorderSide(
+                                width: 2,
+                              ),
+                            ),
+                            focusedBorder: UnderlineInputBorder(
+                              borderSide: BorderSide(
+                                width: 3,
+                              ),
+                            ),
+                          ),
+                          keyboardType: TextInputType.text,
+                        ),
+                        Padding(padding: EdgeInsets.all(8.0)),
+                        TextFormField(
+                          controller: _suite,
+                          decoration: InputDecoration(
+                            label: Text(
+                              'Valor Suite',
                             ),
                             enabledBorder: UnderlineInputBorder(
                               borderSide: BorderSide(

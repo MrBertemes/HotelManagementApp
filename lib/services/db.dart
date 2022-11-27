@@ -66,9 +66,17 @@ class DatabaseHelper {
       String camaextra,
       DateTime checkin,
       DateTime checkout) async {
-        var res = await connection.query('''
+    var res = await connection.query('''
         select cadastrar_reserva($numquarto, $codh, $nrocliente,  '$camaextra', '$checkin', '$checkout');
         ''');
-        return res;
-      }
+    return res;
+  }
+
+  Future<List<Map<String, Map<String, dynamic>>>> estadias(int codh) async {
+    DateTime data = DateTime.now();
+    var res = await connection.mappedResultsQuery('''
+    
+    ''');
+    return res;
+  }
 }

@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:bk/main.dart';
 import 'package:intl/intl.dart';
 
+
 class ReservaPage extends StatefulWidget {
   const ReservaPage({super.key});
 
@@ -169,9 +170,8 @@ class _ReservaPageState extends State<ReservaPage> {
                             DateTime? pickedDate = await showDatePicker(
                                 context: context,
                                 initialDate: DateTime.now(),
-                                firstDate: DateTime(
-                                    2000), //DateTime.now() - not to allow to choose before today.
-                                lastDate: DateTime(2101));
+                                firstDate: DateTime.now(),
+                                lastDate: DateTime(2100));
 
                             if (pickedDate != null) {
                               String formattedDate =
@@ -190,17 +190,16 @@ class _ReservaPageState extends State<ReservaPage> {
                           decoration: const InputDecoration(
                               icon: Icon(
                                   Icons.calendar_today), //icon of text field
-                              labelText: "Checkin" //label text of field
+                              labelText: "Checkout" //label text of field
                               ),
                           readOnly:
                               true, //set it true, so that user will not able to edit text
                           onTap: () async {
                             DateTime? pickedDate = await showDatePicker(
                                 context: context,
-                                initialDate: DateTime.now(),
-                                firstDate: DateTime(
-                                    2000), //DateTime.now() - not to allow to choose before today.
-                                lastDate: DateTime(2101));
+                                initialDate: DateTime.now().add(Duration(days: 1)),
+                                firstDate: DateTime.now().add(Duration(days: 1)),
+                                lastDate: DateTime(2100));
 
                             if (pickedDate != null) {
                               String formattedDate =

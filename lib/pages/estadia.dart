@@ -6,14 +6,14 @@ import 'package:flutter/material.dart';
 import 'package:bk/main.dart';
 import 'package:intl/intl.dart';
 
-class ReservaPage extends StatefulWidget {
-  const ReservaPage({super.key});
+class EstadiaPage extends StatefulWidget {
+  const EstadiaPage({super.key});
 
   @override
-  State<ReservaPage> createState() => _ReservaPageState();
+  State<EstadiaPage> createState() => _EstadiaPageState();
 }
 
-class _ReservaPageState extends State<ReservaPage> {
+class _EstadiaPageState extends State<EstadiaPage> {
   final camaExtra = ValueNotifier('');
   final camaOpcoes = <String>['Sim', 'Não'];
   late final TextEditingController _idcliente;
@@ -58,7 +58,7 @@ class _ReservaPageState extends State<ReservaPage> {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             const Text(
-              'Reservas',
+              'Estadia',
               style: TextStyle(
                 fontWeight: FontWeight.bold,
               ),
@@ -258,13 +258,13 @@ class _ReservaPageState extends State<ReservaPage> {
                           ce: camaExtra.value,
                           checkin: DateTime.parse(_checkin.text),
                           checkout: DateTime.parse(_checkout.text));
-                      var res = await db.cadastrarReserva(
-                          novaReserva.numquarto,
-                          codHotel,
-                          novaReserva.nrocliente,
-                          novaReserva.ce,
-                          novaReserva.checkin,
-                          novaReserva.checkout);
+                      // var res = await db.cadastrarReserva(
+                      //     novaReserva.numquarto,
+                      //     codHotel,
+                      //     novaReserva.nrocliente,
+                      //     novaReserva.ce,
+                      //     novaReserva.checkin,
+                      //     novaReserva.checkout);
                       setState(() {
                         listReserv.add(novaReserva);
                       });

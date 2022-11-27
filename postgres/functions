@@ -81,9 +81,9 @@ language sql;
 
 create or replace function quartos_disponiveis(dtcheckin date, dtcheckout date, codh integer) returns table(num integer, andar integer, tipo text, preco float) as
 $$
-	select num, andar, tipo, preco from quartohotel join quartos on numquarto = num
-		where codhotel = codh and (numquarto, codhotel) not in (select numquarto, codhotel from estadia e
-									  where e.codhotel = codh and ((dtcheckout between checkin and checkout) or (dtcheckin between checkin and checkout)));
+    select num, andar, tipo, preco from quartohotel join quartos on numquarto = num
+        where codhotel = codh and (numquarto, codhotel) not in (select numquarto, codhotel from estadia e
+                                      where e.codhotel = codh and ((dtcheckout between checkin and checkout) or (dtcheckin between checkin and checkout) or (dtcheckin < checkin and dtcheckout > checkout)));
 $$
 language sql;
 
@@ -174,7 +174,30 @@ language plpgsql;
 
 
 
+create or replace function trigger_estadia() returns trigger as
+$$
+declare cont integer default 0;
+begin
+    if TG_OP = 'UPDATE' then
+        if (select count(code) from estadia where numquarto = new.numquarto and codhotel = new.codhotel
+            and (new.checkin not between checkin and checkout) and (new.checkout not between checkin and checkout)
+            and (new.checkin < checkin and new.checkout > checkout) and code != old.code) > 0 then
+            raise exception 'Já existe reserva feita para esta data neste quarto!';
+        end if;
+    else
+        if (select count(code) from estadia where numquarto = new.numquarto and codhotel = new.codhotel
+            and (new.checkin not between checkin and checkout) and (new.checkout not between checkin and checkout)
+            and (new.checkin < checkin and new.checkout > checkout) and code != old.code) > 0 then
+            raise exception 'Já existe reserva feita para esta data neste quarto!';
+        end if;
+    end if;
+    return new;
+end;
+$$
+language plpgsql;
 
+create trigger trigger_estadia before insert or update on estadia
+    for each row execute procedure trigger_estadia();
 
 
 

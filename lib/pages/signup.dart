@@ -44,14 +44,15 @@ class _SignupPageState extends State<SignupPage> {
     super.dispose();
   }
 
-  Future<void> cadastroHotel(int cod, int pin, String nome, String end, String tel) async{
+  Future<void> cadastroHotel(
+      int cod, int pin, String nome, String end, String tel) async {
     var res = await db.cadastroHotel(cod, pin, nome, end, tel);
     Navigator.popAndPushNamed(context, '/login');
-  } 
+  }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold( 
+    return Scaffold(
       body: LayoutBuilder(
         builder: (BuildContext context, BoxConstraints viewportConstraints) {
           return SingleChildScrollView(
@@ -209,7 +210,8 @@ class _SignupPageState extends State<SignupPage> {
                           onPressed: () async {
                             var cod = int.parse(_cod.text);
                             var pin = int.parse(_pin.text);
-                            cadastroHotel(cod, pin, _nome.text, _end.text, _tel.text);
+                            cadastroHotel(
+                                cod, pin, _nome.text, _end.text, _tel.text);
                           },
                           builder: (context, child, callback, _) {
                             return TextButton(
@@ -240,15 +242,69 @@ class _SignupPageState extends State<SignupPage> {
                             ),
                           ),
                         ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Expanded(
+                              child: Container(
+                                height: 2,
+                                decoration: BoxDecoration(
+                                  gradient: LinearGradient(
+                                    // ignore: prefer_const_literals_to_create_immutables
+                                    colors: [
+                                      Color.fromARGB(0, 252, 247, 247),
+                                      Colors.blueGrey,
+                                    ],
+                                  ),
+                                ),
+                              ),
+                            ),
+                            Padding(
+                              padding: EdgeInsets.all(15),
+                              child: Text(
+                                "OU",
+                                style: TextStyle(
+                                  color: Colors.blueGrey,
+                                  fontSize: 12.0,
+                                ),
+                              ),
+                            ),
+                            Expanded(
+                              child: Container(
+                                height: 2,
+                                decoration: BoxDecoration(
+                                  gradient: LinearGradient(
+                                    // ignore: prefer_const_literals_to_create_immutables
+                                    colors: [
+                                      Colors.blueGrey,
+                                      Color.fromARGB(0, 251, 249, 249),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
                         TextButton(
-                          child: const Text('Já tenho uma conta'),
+                          child: const Text(
+                            'Já tenho uma conta',
+                            style: TextStyle(
+                                color: Color.fromARGB(255, 13, 71, 161),
+                                fontSize: 16.0,
+                                fontWeight: FontWeight.bold),
+                          ),
                           style: TextButton.styleFrom(
-                            backgroundColor: Colors.white,
+                            backgroundColor: Colors.grey,
                             padding: EdgeInsets.all(10.0),
                             minimumSize: Size(viewportConstraints.maxWidth, 60),
+                            shape: RoundedRectangleBorder(
+                              side: BorderSide(
+                                  color: Colors.blueGrey, width: 2.0),
+                              borderRadius: BorderRadius.circular(8),
+                            ),
                           ),
-                          onPressed: () async {
-                            await Navigator.pushNamed(context, '/login');
+                          onPressed: () {
+                            Navigator.pop(context);
                           },
                         ),
                       ],

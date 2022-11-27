@@ -1,6 +1,7 @@
 // ignore_for_file: deprecated_member_use, prefer_typing_uninitialized_variables
 
 import 'package:bk/pages/chambre.dart';
+import 'package:bk/pages/estadia.dart';
 import 'package:bk/pages/hotel.dart';
 import 'package:bk/pages/reservation.dart';
 import 'package:bk/pages/signup.dart';
@@ -74,6 +75,7 @@ class _MainState extends State<Main> {
         '/hotel': (context) => const HotelPage(),
         '/chambre': (context) => const ChambrePage(),
         '/reserva':(context) => const ReservaPage(),
+        '/estadia':(context) => const EstadiaPage(),
       },
     );
   }

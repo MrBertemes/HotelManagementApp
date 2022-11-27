@@ -37,6 +37,7 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   Future<void> login(String cod, String pin) async {
+    listReserv = [];
     iGlobal = 0;
     jGlobal = 0;
     codHotel = int.parse(cod);
@@ -58,17 +59,16 @@ class _LoginPageState extends State<LoginPage> {
         }
       }
     }
-    if(hotel.isEmpty){
+    if (hotel.isEmpty) {
       var s = await db.verificaSenhaErrada(codHotel, pinInt);
-      for(var element in s){
-        for(var v in element.values){
-          for(var i in v.keys){
-            if(v[i]>0){
+      for (var element in s) {
+        for (var v in element.values) {
+          for (var i in v.keys) {
+            if (v[i] > 0) {
               setState(() {
                 _invalidPin = true;
               });
-            }
-            else{
+            } else {
               setState(() {
                 _invalidCod = true;
               });
@@ -76,8 +76,7 @@ class _LoginPageState extends State<LoginPage> {
           }
         }
       }
-    }
-    else{
+    } else {
       Navigator.popAndPushNamed(context, '/hotel');
     }
   }
@@ -263,12 +262,19 @@ class _LoginPageState extends State<LoginPage> {
                             ],
                           ),
                           TextButton(
-                            child: const Text('Cadastrar'),
+                            child: const Text(
+                              'Cadastrar',
+                              style: TextStyle(
+                                color: Color.fromARGB(255, 13, 71, 161),
+                                fontSize: 16.0,
+                                fontWeight: FontWeight.bold
+                              ),
+                            ),
                             style: TextButton.styleFrom(
-                              textStyle: TextStyle(
-                                  color: Colors.blue[900],
-                                  fontSize: 16.0,
-                                  fontWeight: FontWeight.bold),
+                              // textStyle: TextStyle(
+                              //     color: Colors.blue[900],
+                              //     fontSize: 16.0,
+                              //     fontWeight: FontWeight.bold),
                               backgroundColor: Colors.grey,
                               padding: EdgeInsets.all(10.0),
                               minimumSize:

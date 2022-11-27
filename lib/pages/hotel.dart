@@ -176,7 +176,9 @@ class _HotelPageState extends State<HotelPage> {
                           loadingWidget: CircularProgressIndicator(
                             strokeWidth: 3.0,
                           ),
-                          onPressed: () async {},
+                          onPressed: () async {
+                            Navigator.popAndPushNamed(context, '/estadia');
+                          },
                           builder: (context, child, callback, _) {
                             return ElevatedButton(
                               style: ElevatedButton.styleFrom(

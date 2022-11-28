@@ -1,6 +1,6 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
-import '../services/db.dart';
+import '../model/db.dart';
 
 class SplashScreen extends StatefulWidget {
   final String route;

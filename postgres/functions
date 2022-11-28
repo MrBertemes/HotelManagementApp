@@ -247,3 +247,15 @@ begin
 end;
 $$
 language plpgsql;
+
+create or replace function cadastrar_servico_estadia(tiposervico text, dt date, numq integer, codh integer) returns void as
+$$
+declare coden integer;
+        codsn integer;
+begin
+    select code into coden from estadia where numquarto = numq and codhotel = codh and dt between checkin and checkout;
+    select cods into codsn from servicos where tipo = tiposervico;
+    insert into servicoestadia values(codsn, coden, dt);
+end;
+$$
+language plpgsql;

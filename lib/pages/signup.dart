@@ -2,7 +2,7 @@
 
 import 'package:async_button_builder/async_button_builder.dart';
 import 'package:bk/main.dart';
-import 'package:bk/services/db.dart';
+import 'package:bk/model/db.dart';
 import 'package:flutter/material.dart';
 
 class SignupPage extends StatefulWidget {

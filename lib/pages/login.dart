@@ -38,6 +38,18 @@ class _LoginPageState extends State<LoginPage> {
 
   Future<void> login(String cod, String pin) async {
     listReserv = [];
+    listTipoServico = [];
+    var res = await db.getAllServices();
+    print(res);
+    for(var e in res){
+      for(var i in e.values){
+        for(var k in i.keys){
+          if(k=='tipo'){
+            listTipoServico.add(i[k]);
+          }
+        }
+      }
+    }
     listStay = [];
     listCliente = [];
     iGlobal = 0;

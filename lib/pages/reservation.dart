@@ -1,7 +1,7 @@
 // ignore_for_file: prefer_const_literals_to_create_immutables, use_build_context_synchronously
 
 import 'package:async_button_builder/async_button_builder.dart';
-import 'package:bk/services/reserv.dart';
+import 'package:bk/model/reserv.dart';
 import 'package:flutter/material.dart';
 import 'package:bk/main.dart';
 import 'package:intl/intl.dart';

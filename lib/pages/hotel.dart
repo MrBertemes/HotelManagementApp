@@ -1,9 +1,10 @@
 // ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables, use_build_context_synchronously
 import 'package:async_button_builder/async_button_builder.dart';
 import 'package:bk/main.dart';
-import 'package:bk/services/client.dart';
-import 'package:bk/services/reserv.dart';
-import 'package:bk/services/stay.dart';
+import 'package:bk/model/client.dart';
+import 'package:bk/model/reserv.dart';
+import 'package:bk/model/service.dart';
+import 'package:bk/model/stay.dart';
 import 'package:flutter/material.dart';
 
 class HotelPage extends StatefulWidget {
@@ -122,7 +123,6 @@ class _HotelPageState extends State<HotelPage> {
                           onPressed: () async {
                             listReserv = [];
                             var res = await db.reservas(codHotel);
-                            print(res);
                             for (var e in res) {
                               Reserv reserva = Reserv(
                                   cpf: '',
@@ -282,6 +282,60 @@ class _HotelPageState extends State<HotelPage> {
                           },
                           child: Text(
                             'Clientes',
+                            style: TextStyle(color: Colors.blue[900]),
+                          ),
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: AsyncButtonBuilder(
+                          loadingWidget: CircularProgressIndicator(
+                            strokeWidth: 3.0,
+                          ),
+                          onPressed: () async {
+                            listService = [];
+                            var res = await db.getServicosEstadias(codHotel);
+                            for (var e in res) {
+                              Service sc = Service(
+                                data: DateTime.now(),
+                                descricao: '',
+                                numquarto: 0,
+                              );
+                              for (var v in e.values) {
+                                for (var k in v.keys) {
+                                  if (k == 'data') {
+                                    sc.data = v[k];
+                                  } else if (k == 'numquarto') {
+                                    sc.numquarto = v[k];
+                                  } else if (k == 'tipo') {
+                                    sc.descricao = v[k];
+                                  }
+                                }
+                              }
+                              listService.add(sc);
+                            }
+                            Navigator.popAndPushNamed(context, '/services');
+                          },
+                          builder: (context, child, callback, _) {
+                            return ElevatedButton(
+                              style: ElevatedButton.styleFrom(
+                                padding: EdgeInsets.all(10.0),
+                                minimumSize:
+                                    Size(viewportConstraints.maxWidth, 60),
+                                shape: RoundedRectangleBorder(
+                                  side: BorderSide(
+                                      color: Colors.blueGrey, width: 2.0),
+                                  borderRadius: BorderRadius.circular(8),
+                                ),
+                                backgroundColor: Colors.grey,
+                                elevation: 2.0,
+                              ),
+                              onPressed: callback,
+                              child: child,
+                            );
+                          },
+                          child: Text(
+                            'Serviços',
                             style: TextStyle(color: Colors.blue[900]),
                           ),
                         ),

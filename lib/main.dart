@@ -4,18 +4,21 @@ import 'package:bk/pages/chambre.dart';
 import 'package:bk/pages/estadia.dart';
 import 'package:bk/pages/hotel.dart';
 import 'package:bk/pages/reservation.dart';
+import 'package:bk/pages/services.dart';
 import 'package:bk/pages/signup.dart';
-import 'package:bk/services/db.dart';
-import 'package:bk/services/reserv.dart';
-import 'package:bk/services/stay.dart';
+import 'package:bk/model/db.dart';
+import 'package:bk/model/reserv.dart';
+import 'package:bk/model/stay.dart';
 import 'package:flutter/material.dart';
 import './pages/splash.dart';
 import './pages/login.dart';
 import 'pages/clientela.dart';
-import 'services/client.dart';
+import 'model/client.dart';
+import 'model/service.dart';
 
 String _defaultHome = '/login';
 DatabaseHelper db = DatabaseHelper();
+List<String> listTipoServico = [];
 late List<Map<String,Map<String,dynamic>>> hotel;
 late String nomeHotel;
 late String enderecoHotel;
@@ -31,6 +34,7 @@ List<List<int>> matrixDisponivel = [];
 List<Reserv> listReserv = [];
 List<Stay> listStay = [];
 List<Client> listCliente = [];
+List<Service> listService = [];
 late List<Map<String,Map<String,dynamic>>> quartosHotel ;
 late String telefoneHotel;
 
@@ -81,7 +85,8 @@ class _MainState extends State<Main> {
         '/chambre': (context) => const ChambrePage(),
         '/reserva':(context) => const ReservaPage(),
         '/estadia':(context) => const EstadiaPage(),
-        '/client':(context) => const ClientelaPage()
+        '/client':(context) => const ClientelaPage(),
+        '/services':(context) => const ServicesPage(),
       },
     );
   }

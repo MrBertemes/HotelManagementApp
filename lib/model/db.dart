@@ -1,5 +1,7 @@
 // ignore_for_file: non_constant_identifier_names
 
+import 'package:bk/main.dart';
+import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart';
 import 'package:postgres/postgres.dart';
 
@@ -115,4 +117,35 @@ class DatabaseHelper {
     return res;
   }
 
+  Future<PostgreSQLResult> cadastrarServicoEstadia(String tipo, DateTime data, int numquarto) async {
+    var res =  await connection.query('''
+    select cadastrar_servico_estadia('$tipo', '$data', $numquarto, $codHotel);
+    ''');
+    return res;
+  }
+
+  Future<List<Map<String, Map<String, dynamic>>>> getServicosEstadias(int codh) async {
+    var res = await connection.mappedResultsQuery('''
+    select e.numquarto, s.data, n.tipo 
+    from servicoestadia s join estadia e on e.code = s.codestadia 
+    join servicos n on n.cods = s.codservico
+    where e.codhotel = $codh
+    order by s.data
+    ''');
+    return res;
+  }
+
+  Future<PostgreSQLResult> cadastrarServico(String tipo, double preco) async {
+    var res = await connection.query('''
+    select cadastrar_servico('$tipo', $preco);
+    ''');
+    return res;
+  }
+
+  Future<List<Map<String, Map<String, dynamic>>>> getAllServices() async {
+    var res = await connection.mappedResultsQuery('''
+    select tipo from servicos;
+    ''');
+    return res;
+  }
 }
